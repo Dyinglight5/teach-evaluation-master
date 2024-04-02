@@ -1,0 +1,19 @@
+<!--pages/home/addStudent/addStudent.wxml-->
+<van-cell-group>
+  <!--输入学生姓名-->
+  <van-field value="{{ studentName }}" placeholder="请输入学生姓名" border="{{ false }}" bind:change="onChangeStudentName" />
+  <!--请输入学生学号-->
+  <van-field value="{{ studentNumber }}" placeholder="请输入学生学号" border="{{ false }}" bind:change="onChangeStudentNumber" />
+  <!-- 选择学生实习的时间 -->
+  <van-cell title="选择开始日期" value="{{ beginDate }}" bind:click="onDisplayBeginDate" />
+
+  <van-cell title="选择结束日期" value="{{ endDate }}" bind:click="onDisplayEndDate" />
+
+  <van-popup position="bottom" show="{{ showBeginDate }}" bind:close="onCloseBeginDate">
+    <van-datetime-picker confirm-button-text="" cancel-button-text=""  type="year-month" value="{{ beginTime }}" min-date="{{ minTime }}" bind:input="onInputBeginDate" />
+  </van-popup>
+  <van-popup position="bottom" show="{{ showEndDate }}" bind:close="onCloseEndDate">
+    <van-datetime-picker confirm-button-text="" cancel-button-text="" type="year-month" value="{{ endTime }}" min-date="{{ minTime }}" bind:input="onInputEndDate" />
+  </van-popup>
+</van-cell-group>
+<van-button color="#4489cd" bind:tap="addStudent" type="primary" size="large">确认添加</van-button>

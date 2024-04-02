@@ -1,0 +1,8 @@
+/* components/TeachingManagement/TeachingManagement.wxss */
+
+.stepper {
+  width: 360rpx;
+  position: relative;
+  right: 80rpx;
+  bottom: 60rpx;
+}

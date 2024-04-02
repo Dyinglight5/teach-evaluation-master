@@ -1,0 +1,3 @@
+/* components/ShowHours/ShowHours.wxss */
+
+@import '../../public/components.wxss';

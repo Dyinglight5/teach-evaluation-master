@@ -1,0 +1,17 @@
+/* components/Honor/Honor.wxss */
+
+
+.title {
+  padding: 35rpx;
+  width: 80%;
+  margin: 20rpx auto;
+  font-weight: 700;
+  font-size: 40rpx;
+}
+
+.stepper {
+  width: 360rpx;
+  position: relative;
+  right: 80rpx;
+  bottom: 60rpx;
+}

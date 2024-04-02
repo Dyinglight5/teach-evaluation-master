@@ -1,0 +1,17 @@
+/* components/TheoryCourse.wxss */
+
+van-col view {
+  text-align: center;
+  font-weight: 700;
+  font-size: 36rpx;
+  margin: 50rpx auto;
+  padding: 0rpx 30rpx;
+}
+
+.stepper {
+  width: 360rpx;
+  position: relative;
+  right: 80rpx;
+  bottom: 60rpx;
+}
+

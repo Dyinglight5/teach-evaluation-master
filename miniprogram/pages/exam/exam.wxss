@@ -1,0 +1,76 @@
+/* pages/apply/apply.wxss */
+
+.list {
+  height: 1000rpx;
+  width: 98%;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40rpx 0;
+  box-shadow: 10px 5px 5px rgb(201, 193, 193);
+  background-color: rgb(243, 248, 250);
+  margin: 10rpx auto;
+}
+
+.left {
+  padding-left: 30rpx;
+  color: rgb(57, 130, 241);
+  width: 160rpx;
+}
+
+.middle {
+  font-weight: 700;
+  font-size: 40rpx;
+}
+
+.right {
+  padding-right: 30rpx;
+}
+
+.title_name {
+  display: inline-block;
+  color: rgb(224, 165, 96);
+}
+ .title {
+  padding: 35rpx;
+  width: 80%;
+  margin: 1rpx auto;
+  font-weight: 700;
+  font-size: 40rpx;
+  text-align: center;
+}
+
+.add {
+  background-color: rgb(231, 171, 92);
+  width: 60%;
+  margin: 50rpx auto;
+  text-align: center;
+  padding: 30rpx;
+  border-radius: 20rpx;
+  position: fixed;
+  bottom: 20rpx;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.confirmPopup {
+  height: 500rpx;
+}
+
+.confirmText {
+  width: 260rpx;
+  text-align: center;
+  margin: 80rpx auto;
+  font-size: 38rpx;
+  font-weight: 700;
+}
+
+.confirmButton {
+  margin-top: 200rpx;
+  text-align: center;
+  width: 500rpx;
+  margin: 200rpx auto;
+}

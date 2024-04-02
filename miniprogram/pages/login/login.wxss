@@ -1,0 +1,61 @@
+/* pages/register/register.wxss */
+
+page {
+  background-color: rgba(42, 140, 153, 0.8);
+}
+
+.header_title {
+  width: 56%;
+  font-size: 50rpx;
+  font-weight: 700;
+  margin: 30rpx auto;
+  color: rgb(252, 232, 232);
+  text-shadow: 5rpx 5rpx 5rpx rgb(252, 178, 42);
+  text-align: center;
+}
+
+.form {
+  width: 70%;
+  height: 900rpx;
+  margin: 100rpx auto;
+  padding: 30rpx;
+  border-radius: 16rpx;
+  box-shadow: 2rpx 10rpx 20rpx gray;
+  background-color: #fff;
+}
+
+.inputBox {
+  margin: 30rpx 0;
+}
+
+van-field van-icon {
+  position: absolute;
+  top: 20rpx !important;
+  right: 0;
+}
+
+.van-field__body, .van-field__body--text {
+  font-size: 30rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  margin-left: 30rpx;
+}
+
+input {
+  margin: 20rpx;
+  padding: 20rpx 40rpx;
+  border-bottom: 1px solid gray;
+}
+
+.submit {
+  width: 80%;
+  font-size: large;
+  margin: 80rpx auto;
+  text-align: center;
+  padding: 20rpx;
+  border-radius: 10rpx;
+  background-color: #2f6afd;
+  color: #fff;
+}

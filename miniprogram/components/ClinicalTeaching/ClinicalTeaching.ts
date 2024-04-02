@@ -1,0 +1,379 @@
+// components/TheoryCourse.ts
+const data = wx.cloud.database();
+const teachCollection = data.collection('teach');
+Component({
+  /**
+   * 组件的属性列表
+   */
+  properties: {
+
+  },
+
+  /**
+   * 组件的初始数据
+   */
+  data: {
+    hours: [] as any,
+    activeNames: ['1'],
+    modifyPermission: false,
+    modifyPermissionOfResearch: false,
+    status: '',
+    permission: false,
+    studentName: '',
+    studentNumber: '',
+    //是否冲突
+    timeconflicts: false,
+    //带教时间
+    teachtime: 0,
+    //存放从数据库获取的数据
+    teachlist: [] as any,
+    //是否找到学生
+    findstudent: false,
+    showAddStudent: false,
+    beginTime: new Date().getTime(),
+    endTime: new Date().getTime(),
+    selectedTime: new Date().getTime(),
+    beginDate: '',
+    endDate: '',
+    selectedDate: '',
+    minTime: new Date(2023, 0).getTime(),
+    showBeginDate: false,
+    showEndDate: false,
+    showDate: false,
+    addStudentId: 1,
+    //带教的时间（年份）
+    studentYear: '',
+    //带教的时间（天数）
+    studentDays: ''
+  },
+
+  /**
+   * 组件的方法列表
+   */
+  methods: {
+    //id 1-3 输入学生的年份
+    onChangeStudentYear() {
+      this.setData({
+        studentYear: '1'
+      })
+    },
+    //id 4-5 输入学生的天数
+    onChangeStudentDay(event: any) {
+      this.setData({
+        studentDays: event.detail
+      })
+    },
+    //点击确认添加学生的按钮（年份）
+    addStudent() {
+      //检查是否为空
+      const data = this.data
+      const flag = (data.addStudentId < 4 && data.studentName.trim() != '' && data.studentNumber.trim() != '' && data.studentYear.trim() != '') || ((data.addStudentId == 4 || data.addStudentId == 5) && data.studentName.trim() != '' && data.studentNumber.trim() != '' && data.studentDays.trim() != '') || (data.addStudentId == 6 && data.studentName.trim() != '' && data.studentNumber.trim() != '')
+      if (!flag) {
+        wx.showToast({
+          title: '输入不能为空',
+          icon: 'error'
+        })
+        return
+      }
+      //检查数据库中是否有该学生
+      const db = wx.cloud.database()
+      const studentCollection = db.collection('students')
+      new Promise((resolve, reject) => {
+        if (data.addStudentId < 4) {
+          resolve(true)
+        } else {
+          studentCollection.where({
+            name: data.studentName,
+            id: data.studentNumber
+          }).get({
+            success(res) {
+              const data = res.data
+              if (data.length != 0) {
+                resolve(true)
+              } else {
+                reject(false)
+              }
+            }
+          })
+        }
+      }).then(() => {
+        //成功后将学生添加到本地中
+        let newHours = data.hours
+        if (data.addStudentId < 4) {
+          newHours[data.addStudentId - 1].students.push({
+            id: data.studentNumber,
+            name: data.studentName,
+            year: parseInt(data.studentYear)
+          })
+        } else if (data.addStudentId == 4 || data.addStudentId == 5) {
+          if (parseInt(data.studentDays) > 15) {
+            //大于15天就算作三周
+            newHours[data.addStudentId - 1].students.push({
+              id: data.studentNumber,
+              name: data.studentName,
+              year: 1
+            })
+          }
+        } else if (data.addStudentId == 6) {
+          const beginDateArr = data.beginDate.split('-')
+          const endDateArr = data.endDate.split('-')
+          newHours[data.addStudentId - 1].students.push({
+            id: data.studentNumber,
+            name: data.studentName,
+            year: parseInt(endDateArr[1]) - parseInt(beginDateArr[1])
+          })
+        }
+        console.log(newHours);
+        this.setData({
+          hours: newHours
+        })
+        wx.getStorage({
+          key: 'hours',
+          success(res) {
+            const hours = res.data
+            hours['clinical_teaching'] = newHours
+            wx.setStorage({
+              key: 'hours',
+              data: hours
+            })
+            const summationUtil = require('../../utils/summationUtil')
+            summationUtil.default.sumAllHours()
+          }
+        })
+        //清空输入框
+        this.setData({
+          studentName: '',
+          studentNumber: '',
+          studentDays: '',
+          studentYear: ''
+        })
+        this.initDate()
+        //关闭弹窗
+        this.onCloseAddStudentPopup()
+        //重新加载数据
+        this.processData()
+      }, () => {
+        //没有找到学生后提示
+        wx.showToast({
+          title: '学生不存在',
+          icon: 'error'
+        })
+      })
+    },
+    //打开选择日期的弹窗
+    onDisplayDate() {
+      this.setData({
+        showDate: true
+      })
+    },
+    //关闭选择日期的弹窗
+    onCloseDate() {
+      this.setData({
+        showDate: false
+      })
+    },
+    //打开开始日期的弹窗
+    onDisplayBeginDate() {
+      this.setData({
+        showBeginDate: true
+      })
+    },
+    //打开结束日期的弹窗
+    onDisplayEndDate() {
+      this.setData({
+        showEndDate: true
+      })
+    },
+    //关闭开始日期的弹窗
+    onCloseBeginDate() {
+      this.setData({
+        showBeginDate: false
+      })
+    },
+    //关闭结束日期的弹窗
+    onCloseEndDate() {
+      this.setData({
+        showEndDate: false
+      })
+    },
+    //选择日期
+    onInputDate(event: any) {
+      const date = new Date(event.detail)
+      this.setData({
+        selectedTime: event.detail,
+        selectedDate: date.getFullYear() + '-' + ((date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1))
+      })
+    },
+    //选择开始日期
+    onInputBeginDate(event: any) {
+      const date = new Date(event.detail)
+      this.setData({
+        beginTime: event.detail,
+        beginDate: date.getFullYear() + '-' + ((date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1))
+      })
+    },
+    //选择结束日期
+    onInputEndDate(event: any) {
+      const date = new Date(event.detail)
+      this.setData({
+        endTime: event.detail,
+        endDate: date.getFullYear() + '-' + ((date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1))
+      });
+    },
+    //输入学生的姓名
+    onChangeStudentName(event: any) {
+      this.setData({
+        studentName: event.detail
+      })
+    },
+    //输入学生的学号
+    onChangeStudentNumber(event: any) {
+      this.setData({
+        studentNumber: event.detail
+      })
+    },
+    //打开添加学生的弹窗
+    showAddStudentPopup(event: any) {
+      this.setData({
+        showAddStudent: true,
+        addStudentId: event.currentTarget.dataset.id
+      });
+    },
+    //关闭添加学生的弹窗
+    onCloseAddStudentPopup() {
+      this.setData({ showAddStudent: false });
+    },
+
+    //点击添加按钮，选择时间，输入姓名ID，添加成功，学生展示次数就可以，步进器医生不可见
+    //处理折叠面板
+    onChange(event: any) {
+      this.setData({
+        activeNames: event.detail,
+      });
+    },
+    //处理步进器
+    onChangeStepper(event: any) {
+      // console.log(event);
+      const id = event.currentTarget.dataset.id
+      const index = event.currentTarget.dataset.index
+      let newHours = this.data.hours
+      newHours[id - 1].students[index].year = event.detail
+      this.setData({
+        hours: newHours
+      })
+      this.processData()
+      //将数据储存在本地
+      wx.getStorage({
+        key: 'hours',
+        success(res) {
+          let hours = res.data
+          hours['clinical_teaching'] = newHours
+          wx.setStorage({
+            key: 'hours',
+            data: hours,
+            success() {
+              //计算和保存到本地
+              // console.log('success');
+              const summationUtil = require('../../utils/summationUtil')
+              summationUtil.default.sumAllHours()
+            }
+          })
+        }
+      })
+    },
+
+    //处理数据，计算出学时
+    processData() {
+      let data = this.data.hours;
+      data.forEach((item: any) => {
+        let sum = 0;
+        item.students.forEach((student: any) => {
+          sum = sum + student.year
+        })
+        item.hour = item.coefficient * sum
+      })
+      this.setData({
+        hours: data
+      })
+    },
+
+    initDate() {
+      const date = new Date(this.data.minTime)
+      this.setData({
+        beginDate: date.getFullYear() + '-' + ((date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)),
+        endDate: date.getFullYear() + '-' + ((date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)),
+        selectedDate: date.getFullYear() + '-' + ((date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1))
+      })
+    }
+  },
+  lifetimes: {
+    created() {
+      this.initDate()
+      //获取修改权限
+      let that = this
+      wx.getStorage({
+        key: 'my_data',
+        success(res) {
+          const _id = res.data._id
+          const db = wx.cloud.database()
+          db.collection('WorkhoursData').doc(_id).get({
+            success(res) {
+              that.setData({
+                modifyPermission: res.data.modifyPermission,
+                modifyPermissionOfResearch: res.data.modifyPermissionOfResearch
+              })
+              wx.getStorage({
+                key: 'status',
+                success(res) {
+                  that.setData({
+                    status: res.data
+                  })
+                  const status = that.data.status
+                  const research = that.data.modifyPermissionOfResearch
+                  if ((status == '教研室' && research == true) || (status == '教育教学部')) {
+                    that.setData({
+                      permission: true
+                    })
+                  }
+                }
+              })
+            }
+          })
+        }
+      })
+      wx.getStorage({
+        key: 'hours',
+        success(res) {
+          // console.log(res.data.clinical_teaching);
+
+          that.setData({
+            hours: res.data.clinical_teaching
+          })
+          that.processData()
+        }
+      })
+
+
+    },
+    attached() {
+      // 在组件被添加到页面节点树中时执行
+      // console.log('attached');
+
+    },
+    detached() {
+      // 在组件被从页面节点树中移除时执行
+      //  console.log('detached');
+
+    },
+    ready() {
+      // 在组件布局完成后执行
+      // console.log('ready');
+
+    },
+    moved() {
+      // 在组件在页面节点树中的位置发生变化时执行
+      // console.log('moved');
+
+    }
+  }
+})

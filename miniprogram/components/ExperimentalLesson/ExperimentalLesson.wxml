@@ -1,0 +1,16 @@
+<!--components/ExperimentalLesson.wxml-->
+<wxs module="unit" src="../../filter/remainTwoNumbers.wxs"></wxs>
+<van-row>
+  <van-col span="8">内容</van-col>
+  <van-col span="8">学时数</van-col>
+  <van-col span="8">学时</van-col>
+</van-row>
+
+<van-row wx:for="{{hours}}" wx:key="id">
+  <van-col style="color: rgb(21, 94, 161);" span="8">{{ item.name }}</van-col>
+  <van-col span="8">
+    <van-stepper min="{{ 0 }}" wx:if="{{ permission }}" custom-class="stepper" input-width="56px" button-size="40px" value="{{ item.hour }}" data-index="{{ index }}" bind:change="onChange" />
+    <text wx:else>{{ item.hour }}</text>
+  </van-col>
+  <van-col style="color: rgb(202, 142, 29);" span="8">{{ unit.saveTwoNumber(item.hour * item.coefficient) }}</van-col>
+</van-row>

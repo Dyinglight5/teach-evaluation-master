@@ -1,0 +1,78 @@
+<!--components/ClinicalTeaching/ClinicalTeaching.wxml-->
+
+<van-row>
+  <van-col span="12">内容</van-col>
+  <van-col span="12">学时</van-col>
+</van-row>
+<van-row wx:for="{{hours}}" wx:key="id">
+  <van-collapse value="{{ activeNames }}" bind:change="onChange">
+    <van-col style="color: rgb(21, 94, 161);" span="12">{{ item.name }}</van-col>
+    <van-col style="color: rgb(202, 142, 29);" span="12">
+      {{ item.hour }}
+    </van-col>
+    <!-- 折叠面板内容 -->
+    <van-collapse-item name="{{ item.id }}">
+      <van-row>
+        <van-col span="12">学生姓名</van-col>
+        <van-col wx:if="{{ item.id < 4 }}" span="12">年份</van-col>
+        <van-col wx:elif="{{ item.id > 5 }}" span="12">月份</van-col>
+        <van-col wx:else span="12">次数</van-col>
+      </van-row>
+      <van-row wx:for="{{ item.students }}" wx:for-item="student" wx:key="id">
+        <van-col span="12">{{ student.name }}</van-col>
+        <van-col span="12">
+          <van-stepper min="{{ 0 }}" wx:if="{{ permission }}" custom-class="stepper" input-width="56px" button-size="40px" value="{{ student.year }}" data-id="{{ item.id }}" data-index="{{ index }}" bind:change="onChangeStepper" />
+          <text wx:else>{{ student.year }}</text>
+        </van-col>
+      </van-row>
+      <van-button wx:if="{{ status == '医生' && modifyPermission == true }} " bind:tap="showAddStudentPopup" data-id="{{ item.id }}" color="#CDC5BF" icon="plus" type="primary" size="large">添加学生</van-button>
+
+    </van-collapse-item>
+  </van-collapse>
+
+</van-row>
+
+<!-- 添加学生的弹窗 -->
+<van-popup position="bottom" custom-style="height: 50%;" show="{{ showAddStudent }}" bind:close="onCloseAddStudentPopup">
+        <view class="title">
+          <view class="title_name">添加学生</view>
+        </view>
+
+        <!--选择带教时间-->
+        <van-cell-group inset>
+          <!--输入学生姓名-->
+          <van-field size="large" label="姓名" clearable model:value="{{ studentName }}" placeholder="请输入学生姓名" border="{{ false }}" bind:change="onChangeStudentName" />
+          <!--请输入学生学号-->
+          <van-field size="large" label="学号" clearable model:value="{{ studentNumber }}" placeholder="请输入学生学号" border="{{ false }}" bind:change="onChangeStudentNumber" />
+          <!-- 选择学生实习的时间 -->
+          <!-- 不同学生单位不同 -->
+          <!-- 输入年份 -->
+          <view wx:if="{{ addStudentId < 4 }}">
+            <van-field size="large" label="年份" clearable model:value="{{ studentYear }}" placeholder="请输入带教年份" border="{{ false }}" bind:change="onChangeStudentYear" />
+          </view>
+          <!-- 选择月份输入天数 -->
+          <view wx:if="{{ addStudentId == 4 || addStudentId == 5 }}">
+            <van-cell title="选择日期" value="{{ selectedDate }}" bind:click="onDisplayDate" />
+            <van-field size="large" label="天数" clearable model:value="{{ studentDays }}" placeholder="请输入带教天数" border="{{ false }}" bind:change="onChangeStudentDay" />
+          </view>
+          <!-- 选择开始和结束月份 -->
+          <view wx:if="{{ addStudentId == 6 }}">
+            <van-cell title="选择开始日期" value="{{ beginDate }}" bind:click="onDisplayBeginDate" />
+            <van-cell title="选择结束日期" value="{{ endDate }}" bind:click="onDisplayEndDate" />
+          </view>
+
+          <!-- id为45的人选择日期 -->
+          <van-popup position="bottom" show="{{ showDate }}" bind:close="onCloseDate">
+            <van-datetime-picker confirm-button-text="" cancel-button-text="" type="year-month" value="{{ selectedTime }}" min-date="{{ minTime }}" bind:input="onInputDate" />
+          </van-popup>
+          <!-- id为6的人选择开始结束日期 -->
+          <van-popup position="bottom" show="{{ showBeginDate }}" bind:close="onCloseBeginDate">
+            <van-datetime-picker confirm-button-text="" cancel-button-text="" type="year-month" value="{{ beginTime }}" min-date="{{ minTime }}" bind:input="onInputBeginDate" />
+          </van-popup>
+          <van-popup position="bottom" show="{{ showEndDate }}" bind:close="onCloseEndDate">
+            <van-datetime-picker confirm-button-text="" cancel-button-text="" type="year-month" value="{{ endTime }}" min-date="{{ minTime }}" bind:input="onInputEndDate" />
+          </van-popup>
+        </van-cell-group>
+        <van-button custom-style="margin-top: 80rpx;" custom-class="addStudentButton" color="#4489cd" bind:tap="addStudent" type="primary" size="large">确认添加</van-button>
+      </van-popup>
+  

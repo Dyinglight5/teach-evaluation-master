@@ -1,0 +1,9 @@
+/* components/TotalHours/TotalHours.wxss */
+
+.confirm {
+  margin-top: 100rpx;
+  width: 98%;
+  background-color: #159955;
+  color: #fff;
+  border-radius: 50rpx;
+}

@@ -1,0 +1,61 @@
+<!--pages/exam/exam.wxml-->
+<view class="title">
+  <view class="title_name">考试场次</view>
+</view>
+<!-- 考试场次列表 -->
+<scroll-view class="list" scroll-y="true">
+  <view class="item" wx:for="{{examlist}}" wx:key="id">
+    <view class="left">{{item.name}}</view>
+    <view class="middle">{{item.time}}</view>
+    <view wx:if="{{ status == '医生' }}" class="right">
+      <!-- 人数已经达到上限 -->
+      <view wx:if="{{ item.personCount >= item.personCeiling }}" style="color: rgb(185, 177, 177);">不可申请</view>
+
+      <!-- 未达到上限 -->
+      <view wx:else>
+        <!-- 未申请，可以申请 -->
+        <view wx:if="{{ item.state == false }}" bindtap="showApplyExamPopup" style="color: rgb(49, 155, 49);" data-applyExamName="{{ item.name }}" data-applyExamTime="{{ item.time }}">申请</view>
+        <!-- 已经申请 -->
+        <view wx:if="{{ item.state == true }}" style="color: rgb(201, 112, 112)" bindtap="onShowCancelApplyPopup" data-_id="{{item._id}}">已申请</view>
+      </view>
+
+    </view>
+  </view>
+</scroll-view>
+<!-- 只有管理员可以添加 -->
+<view wx:if="{{ status == '教育教学部' }}" class="add" bind:tap="onOpenAddExam">添加考试场次</view>
+
+<!-- 添加考试场次的弹窗 -->
+<van-popup position="bottom" show="{{ showAddExam }}" bind:close="onCloseAddExam">
+  <van-datetime-picker item-height="33" title="选择日期" type="date" value="{{ currentDate }}" bind:input="onInputDate" bind:confirm="addExam" bind:cancel="onCloseAddExam" min-date="{{ minDate }}" />
+  <van-datetime-picker item-height="33" title="选择时间" confirm-button-text="" cancel-button-text="" type="time" value="{{ currentTime }}" min-hour="{{ minHour }}" max-hour="{{ maxHour }}" bind:input="onInputTime" />
+  <van-cell-group>
+    <van-field value="{{ addExamName }}" placeholder="请输入考试名称" bind:change="onChangeAddExamName" />
+    <van-field value="{{ addExamPersonCeiling }}" placeholder="请输入监考人数上限" bind:change="onChangeExamPersonCeiling" />
+  </van-cell-group>
+</van-popup>
+
+<!-- 确认申请该场次 -->
+<van-popup round custom-class="confirmPopup" position="bottom" show="{{ showConfirmApplyExamPopup }}" bind:close="closeConfirmApplyExamPopup">
+  <view class="confirmText">确认申请此场次</view>
+  <view class="confirmButton">
+    <van-button round size="large" type="primary" bind:tap="onConfirmApplyExam">确认</van-button>
+  </view>
+
+</van-popup>
+
+<!-- 确认取消申请 -->
+<van-popup round custom-class="confirmPopup" position="bottom" show="{{ showCancelApplyPopup }}" bind:close="onCloseCancelApplyPopup" root-portal="true">
+  <view class="confirmText">确认取消申请</view>
+    <view class="confirmButton">
+      <van-button round size="large" type="primary" bind:tap="onConfirmCancelApply">确认</van-button>
+    </view>
+  
+</van-popup>
+
+<!-- 时间冲突 -->
+<!-- <van-popup position="bottom" show="{{ show2 }}" bind:close="onClose2" root-portal="true">
+  <view class="popup-content">
+    <van-field label="时间冲突！" />
+  </view>
+</van-popup> -->

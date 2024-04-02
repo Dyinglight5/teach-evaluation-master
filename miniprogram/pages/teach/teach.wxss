@@ -1,0 +1,14 @@
+
+
+.title_name {
+  display: inline-block;
+  color: #4489cd;
+}
+ .title {
+  padding: 35rpx;
+  width: 80%;
+  margin: 1rpx auto;
+  font-weight: 700;
+  font-size: 40rpx;
+  text-align: center;
+}

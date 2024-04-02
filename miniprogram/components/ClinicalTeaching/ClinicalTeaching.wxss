@@ -1,0 +1,41 @@
+/* components/ClinicalTeaching/ClinicalTeaching.wxss */
+
+van-col view {
+  position: relative;
+  text-align: center;
+  font-weight: 700;
+  font-size: 36rpx;
+  margin: 50rpx auto;
+  padding: 0rpx 30rpx;
+}
+
+.van-cell__right-icon-wrap {
+  position: absolute;
+  top: -88rpx;
+  right: 40rpx;
+}
+
+.stepper {
+  width: 360rpx;
+  position: relative;
+  right: 80rpx;
+  bottom: 60rpx;
+}
+
+.title_name {
+  display: inline-block;
+  color: #e0a662;
+}
+ .title {
+  padding: 35rpx;
+  width: 80%;
+  margin: 1rpx auto;
+  font-weight: 700;
+  font-size: 40rpx;
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.addStudentButton  {
+  margin-top: 5rpx;
+}

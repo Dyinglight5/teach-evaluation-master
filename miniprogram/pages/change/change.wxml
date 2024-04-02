@@ -1,0 +1,17 @@
+<!--pages/change/change.wxml-->
+<view class="title">{{ hours[name][index - 1].name }}</view>
+
+<van-cell-group>
+  <van-field
+    value="{{ value }}"
+    placeholder="请输入学时数"
+    border="{{ true }}"
+    type="digit"
+    bind:change="onChange"
+    autosize
+    input-align="right"
+    size="large"
+  />
+</van-cell-group>
+
+<van-button color="#1989fa" custom-class="button" type="primary" size="large" bind:tap="submit">确认</van-button>

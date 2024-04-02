@@ -1,0 +1,32 @@
+/**index.wxss**/
+
+.name {
+  font-size: large;
+  font-weight: 700;
+  width: 290rpx;
+  text-align: center;
+  margin: 30rpx auto;
+}
+
+
+.dropdown {
+  height: 100rpx;
+}
+
+.search-view {
+  border-radius: 20rpx;
+  margin-right: 20rpx;
+}
+
+.search-input {
+  border-radius: 20rpx;
+}
+
+.search {
+  margin-left: 20rpx;
+  border-radius: 20rpx;
+}
+
+.search-button {
+  margin-left: 20rpx;
+}

@@ -1,0 +1,13 @@
+<!--components/OtherHours/OtherHours.wxml-->
+<van-row>
+  <van-col span="12">内容</van-col>
+  <van-col span="12">学时</van-col>
+</van-row>
+
+<van-row>
+  <van-col style="color: rgb(21, 94, 161);" span="12">{{ hours[0].name }}</van-col>
+  <van-col style="color: rgb(202, 142, 29);" span="12">
+    <text wx:if="{{ status == '医生' }}">{{ hours[0].hour }}</text>
+    <van-stepper wx:else min="{{ 0 }}" custom-class="stepper" input-width="56px" button-size="40px" value="{{ hours[0].hour }}" data-index="{{ index }}" bind:change="onChange" />
+  </van-col>
+</van-row>

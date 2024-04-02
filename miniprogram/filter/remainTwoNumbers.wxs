@@ -1,0 +1,10 @@
+var unit = {
+  saveTwoNumber: function(number) {
+    var result = Math.round(number * 100) / 100; // 保留两位小数的方法
+    return result;
+  }
+}
+
+module.exports = {
+  saveTwoNumber: unit.saveTwoNumber
+}

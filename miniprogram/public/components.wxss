@@ -1,0 +1,42 @@
+
+
+
+
+.item {
+  padding: 35rpx;
+  width: 80%;
+  margin: 60rpx auto;
+  border: 1px solid rgb(147, 125, 241);
+  border-radius: 20rpx;
+}
+
+.name, .title_name {
+  display: inline-block;
+  width: 80%;
+}
+
+.hour, .title_hour {
+  float: right;
+}
+
+.hour {
+  position: relative;
+}
+
+.hour button {
+  position: absolute;
+  right: -15rpx;
+  top: -22rpx;
+  background-color: rgba(159, 207, 255, 0.8);
+  border-radius: 78rpx;
+  padding: 0 50rpx;
+  font-weight: 700;
+}
+
+.title {
+  padding: 35rpx;
+  width: 80%;
+  margin: 20rpx auto;
+  font-weight: 700;
+  font-size: 40rpx;
+}

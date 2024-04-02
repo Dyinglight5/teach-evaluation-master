@@ -1,0 +1,76 @@
+<!--components/TeachingManagement/TeachingManagement.wxml-->
+<van-row>
+  <van-col span="8">内容</van-col>
+  <van-col span="8">次数</van-col>
+  <van-col span="8">学时</van-col>
+</van-row>
+
+<van-row wx:for="{{hours}}" wx:key="id">
+  <van-collapse value="{{ activeNames }}" bind:change="onChange">
+    <van-col style="color: rgb(21, 94, 161);" span="8">{{ item.name }}</van-col>
+    <!-- 第二列 -->
+    <van-col wx:if="{{ item.year != null }}" span="8">
+      <!-- 步进器 -->
+      <van-stepper min="{{ 0 }}" wx:if="{{ permission }}" custom-class="stepper" input-width="56px" button-size="40px" value="{{ item.year }}" data-index="{{ index }}" bind:change="onChangeHours" />
+      <!-- 不可修改 -->
+      <text wx:else>{{ item.year }}</text>
+    </van-col>
+    <van-col wx:elif="{{ item.month != null }}" span="8">
+      <!-- 步进器 -->
+      <van-stepper min="{{ 0 }}" wx:if="{{ permission }}" custom-class="stepper" input-width="56px" button-size="40px" value="{{ item.month }}" data-index="{{ index }}" bind:change="onChangeHours" />
+      <!-- 不可修改 -->
+      <text wx:else>{{ item.month }}</text>
+    </van-col>
+    <van-col wx:elif="{{ item.times != null }}" span="8">
+      <!-- 步进器 -->
+      <van-stepper min="{{ 0 }}" wx:if="{{ permission }}" custom-class="stepper" input-width="56px" button-size="40px" value="{{ item.times }}" data-index="{{ index }}" bind:change="onChangeHours" />
+      <!-- 不可修改 -->
+      <text wx:else>{{ item.times }}</text>
+    </van-col>
+    <van-col wx:elif="{{ item.day != null }}" span="8">
+      <!-- 步进器 -->
+      <van-stepper min="{{ 0 }}" wx:if="{{ permission }}" custom-class="stepper" input-width="56px" button-size="40px" value="{{ item.day }}" data-index="{{ index }}" bind:change="onChangeHours" />
+      <!-- 不可修改 -->
+      <text wx:else>{{ item.day }}</text>
+    </van-col>
+    <van-col wx:elif="{{ item.months != null }}" span="8">
+      <!-- 步进器 -->
+      <van-stepper min="{{ 0 }}" wx:if="{{ permission }}" custom-class="stepper" input-width="56px" button-size="40px" value="{{ item.months }}" data-index="{{ index }}" bind:change="onChangeHours" />
+      <!-- 不可修改 -->
+      <text wx:else>{{ item.months }}</text>
+    </van-col>
+    <van-col wx:else span="8"></van-col>
+    <!-- 第三列 -->
+    <van-col style="color: rgb(202, 142, 29);" wx:if="{{ item.year }}" span="8">{{ item.coefficient * item.year }}</van-col>
+    <van-col style="color: rgb(202, 142, 29);" wx:elif="{{ item.month }}" span="8">{{ item.coefficient * item.month }}</van-col>
+    <van-col style="color: rgb(202, 142, 29);" wx:elif="{{ item.times }}" span="8">{{ item.coefficient * item.times }}</van-col>
+    <van-col style="color: rgb(202, 142, 29);" wx:elif="{{ item.day }}" span="8">{{ item.coefficient * item.day }}</van-col>
+    <van-col style="color: rgb(202, 142, 29);" wx:elif="{{ item.months }}" span="8">{{ item.coefficient * item.months }}</van-col>
+    <van-col style="color: rgb(202, 142, 29);" wx:else span="8">
+      {{ item.hour }}
+    </van-col>
+    <!-- 折叠面板内容 -->
+    <van-collapse-item wx:if="{{ item.levels != null }}" name="{{ item.id }}">
+      <van-row>
+        <van-col span="12">等级</van-col>
+        <van-col span="12">次数</van-col>
+      </van-row>
+      <van-row wx:for="{{ item.levels }}" wx:for-item="rank" wx:key="id">
+        <van-col span="12">{{ rank.level }}</van-col>
+        <van-col wx:if="{{ rank.times != null }}" span="12">
+          <van-stepper min="{{ 0 }}" wx:if="{{ permission }}" custom-class="stepper" input-width="56px" button-size="40px" value="{{ rank.times }}" data-id="{{ item.id }}" data-index="{{ index }}" bind:change="onChangeStepper" />
+          <text wx:else>{{ rank.times }}</text>
+        </van-col>
+        <van-col wx:if="{{ rank.days != null }}" span="12">
+          <van-stepper min="{{ 0 }}" wx:if="{{ permission }}" custom-class="stepper" input-width="56px" button-size="40px" value="{{ rank.days }}" data-id="{{ item.id }}" data-index="{{ index }}" bind:change="onChangeStepper" />
+          <text wx:else>{{ rank.days }}</text>
+        </van-col>
+        <van-col wx:if="{{ rank.hours != null }}" span="12">
+          <van-stepper min="{{ 0 }}" wx:if="{{ permission }}" custom-class="stepper" input-width="56px" button-size="40px" value="{{ rank.hours }}" data-id="{{ item.id }}" data-index="{{ index }}" bind:change="onChangeStepper" />
+          <text wx:else>{{ rank.hours }}</text>
+        </van-col>
+      </van-row>
+    </van-collapse-item>
+  </van-collapse>
+
+</van-row>

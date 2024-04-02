@@ -1,0 +1,15 @@
+<!--pages/teach/teach.wxml-->
+<view class="title">
+  <view class="title_name">添加学生带教</view>
+</view>
+
+<!--选择带教时间-->
+<view bind:tap="onOpenCalendar">选择带教时间</view>
+<van-calendar color="#3d81c5" show="{{ showCalendar }}" type="range" bind:close="onCloseCalendar" bind:confirm="onConfirmCalendar" />
+<van-cell-group>
+  <!--输入学生姓名-->
+  <van-field value="{{ studentName }}" placeholder="请输入学生姓名" border="{{ false }}" bind:change="onChangeStudentName" />
+  <!--请输入学生学号-->
+  <van-field value="{{ studentNumber }}" placeholder="请输入学生学号" border="{{ false }}" bind:change="onChangeStudentNumber" />
+</van-cell-group>
+<van-button bind:tap="" type="primary" size="large">大号按钮</van-button>

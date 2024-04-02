@@ -1,0 +1,20 @@
+{
+  "usingComponents": {
+    "van-button": "@vant/weapp/button/index",
+    "van-dropdown-menu": "@vant/weapp/dropdown-menu/index",
+    "van-dropdown-item": "@vant/weapp/dropdown-item/index",
+    "van-search": "@vant/weapp/search/index",
+    "TheoryCourse": "../../components/TheoryCourse/TheoryCourse",
+    "ExperimentalLesson": "../../components/ExperimentalLesson/ExperimentalLesson",
+    "ClinicalTeaching": "../../components/ClinicalTeaching/ClinicalTeaching",
+    "TeachingManagement": "../../components/TeachingManagement/TeachingManagement",
+    "TeachingResearch": "../../components/TeachingResearch/TeachingResearch",
+    "Honor": "../../components/Honor/Honor",
+    "OtherHours": "../../components/OtherHours/OtherHours",
+    "TotalHours": "../../components/TotalHours/TotalHours",
+    "ShowHours": "../../components/ShowHours/ShowHours"
+  },
+  "backgroundTextStyle": "dark",
+  "enablePullDownRefresh": true,
+  "backgroundColor": "#f7f7f7"
+}

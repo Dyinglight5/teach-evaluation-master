@@ -1,0 +1,60 @@
+<!--pages/home/home.wxml-->
+<view class="topBox">
+  <view bind:tap="changeImage" class="headPhoto">
+    <image src="{{ image }}" mode="widthFix"/>
+  </view>
+
+  <view class="userInfo">
+    <view class="status">{{ status }}</view>
+    <view wx:if="{{ name }}" class="name">昵称： {{ name }}</view>
+  <view wx:if="{{ id }}" class="id">ID：{{ id }}</view>
+  </view>
+</view>
+
+<view class="homeBox" bind:tap="goToChangePassword">
+  修改密码
+  <van-icon name="arrow" custom-class="right" />
+</view>
+<view wx:if="{{ status == '教育教学部' }}" class="homeBox" bind:tap="goToAddStudent">
+  添加学生
+  <van-icon name="arrow" custom-class="right" />
+</view>
+
+<view class="homeBox" bind:tap="goToLogin">
+  登录
+  <van-icon name="arrow" custom-class="right" />
+</view>
+
+<view class="homeBox" bind:tap="ViewPDF">
+  查看教学指标文件
+  <van-icon name="arrow" custom-class="right" />
+</view>
+
+<view wx:if="{{ status == '教育教学部' }}" class="homeBox" bind:tap="chooseExceldoc">
+  添加医生（Excel批量导入）
+  <van-icon name="arrow" custom-class="right" />
+</view>
+
+<view wx:if="{{ status == '教育教学部' }}" class="homeBox" bind:tap="chooseExcelstu">
+  添加学生（Excel批量导入）
+  <van-icon name="arrow" custom-class="right" />
+</view>
+<!-- <view class="homeBox" bind:tap="goToLogin">
+  登录
+  <van-icon name="arrow" custom-class="right" />
+</view>
+
+<view class="homeBox" bind:tap="getSum">
+  统计总学时
+  <van-icon name="arrow" custom-class="right" />
+</view>
+
+<view class="homeBox" bind:tap="onTest">
+  测试添加数据到本地
+  <van-icon name="arrow" custom-class="right" />
+</view>
+
+<view class="homeBox" bind:tap="onAddTest">
+  测试添加数据到数据库
+  <van-icon name="arrow" custom-class="right" />
+</view> -->

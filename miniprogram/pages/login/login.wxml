@@ -1,0 +1,38 @@
+<!--pages/register/register.wxml-->
+<view class="header_title">工作量统计小程序</view>
+
+<view class="form">
+  <view class="inputBox">
+    <view class="title">身份</view>
+    <van-field value="{{ statusValue }}" is-link readonly placeholder="请选择身份" bind:tap="onClick" />
+  </view>
+
+  <view wx:if="{{ statusValue == '医生' }}" class="inputBox">
+    <view class="title">工号</view>
+    <input type="text" placeholder="请输入工号" bindinput="idChange" />
+  </view>
+
+  <view wx:if="{{ statusValue == '医生' }}" class="inputBox">
+    <view class="title">姓名</view>
+    <input type="text" placeholder="请输入姓名" bindinput="nameChange" />
+  </view>
+
+  <view class="inputBox">
+    <view class="title">密码</view>
+    <input type="password" placeholder="请输入密码" bindinput="onPasswordChange" />
+  </view>
+
+  <view class="submit" bind:tap="submit">登录</view>
+</view>
+
+<van-popup show="{{ show }}" round position="bottom">
+  <van-cascader
+    wx:if="{{ show }}"
+    value="{{ cascaderValue }}"
+    title="请选择身份"
+    options="{{ options }}"
+    bind:close="onClose"
+    bind:finish="onFinish"
+  />
+</van-popup>
+
