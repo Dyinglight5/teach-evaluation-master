@@ -1,31 +1,47 @@
-<!--components/TotalHours/TotalHours.wxml-->
+<!-- components/TotalHours/TotalHours.wxml -->
 <van-row>
   <van-col style="color: rgb(21, 94, 161);" span="12">{{ department }}</van-col>
   <van-col style="color: rgb(21, 94, 161);" span="12">{{ jobtitle }}</van-col>
 </van-row>
-
-<!-- <van-row>
-  <van-col span="12">内容</van-col>
-  <van-col span="12">学时</van-col>
-</van-row> -->
-
+<!-- 在显示职称的地方添加 -->
+<view class="title-section">
+  <text>当前职称：</text>
+  <picker mode="selector" range="{{['正高', '副高', '中级']}}" bindchange="changeJobTitle">
+    <view class="picker">
+      {{jobtitle || '请选择职称'}}
+      <van-icon name="arrow" />
+    </view>
+  </picker>
+</view>
 <van-row>
-  <van-col style="color: rgb(21, 94, 161);" span="12" >需完成总学时</van-col>
+  <van-col style="color: rgb(21, 94, 161);" span="12">需完成总学时</van-col>
   <van-col span="12">{{ needtime }}</van-col>
 </van-row>
 <van-row>
   <van-col style="color: rgb(255, 0, 0);" span="12">未完成学时</van-col>
-  <van-col style="color: rgb(255, 0, 0);"span="12">{{ hourDifference }}</van-col>
+  <van-col style="color: rgb(255, 0, 0);" span="12">{{ needtime-hours.hour >= 0 ? needtime-hours.hour : 0 }}</van-col>
+</van-row>
+<van-row>
+  <van-col span="12">已完成学时</van-col>
+  <van-col span="12">{{ hours.hour }}</van-col>
 </van-row>
 <!-- 医生进行提交的按钮 -->
-<van-button wx:if="{{ status == '医生' && modifyPermission }}" bind:tap="submit" type="primary" size="large" color="#3d81c5">提交</van-button>
-
+<van-button wx:if="{{ status == '医生' && modifyPermission }}" bind:tap="submit" type="primary" size="large" color="#3d81c5">
+  提交
+</van-button>
 <!-- 教研部进行提交的按钮 -->
-<van-button wx:if="{{ status == '教研室' &&  modifyPermissionOfResearch }}" bind:tap="submit" type="primary" size="large" color="#3d81c5">提交</van-button>
+<van-button wx:if="{{ status == '教研室' &&  modifyPermissionOfResearch }}" bind:tap="submit" type="primary" size="large" color="#3d81c5">
+  提交
+</van-button>
 <!-- 校验部进行确认的按钮 -->
-<button class="confirm" wx:if="{{ status == '教研室' && modifyPermission }}" bind:tap="confirmByResearch" type="primary" size="large">确认已提交（医生）</button>
-
+<button class="confirm" wx:if="{{ status == '教研室' && modifyPermission }}" bind:tap="confirmByResearch" type="primary" size="large">
+  确认已提交（医生）
+</button>
 <!-- 教学部进行提交的按钮 -->
-<van-button wx:if="{{ status == '教育教学部' }}" bind:tap="submit" type="primary" size="large" color="#3d81c5">提交</van-button>
+<van-button wx:if="{{ status == '教育教学部' }}" bind:tap="submit" type="primary" size="large" color="#3d81c5">
+  提交
+</van-button>
 <!-- 教学部进行确认的按钮 -->
-<button class="confirm" wx:if="{{ status == '教育教学部' && modifyPermissionOfResearch }}" bind:tap="confirmByTeaching" size="large">确认已提交（教研室）</button>
+<button class="confirm" wx:if="{{ status == '教育教学部' && modifyPermissionOfResearch }}" bind:tap="confirmByTeaching" size="large">
+  确认已提交（教研室）
+</button>

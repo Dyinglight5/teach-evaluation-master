@@ -16,11 +16,10 @@ Component({
     department:'',
     jobtitle:'',
     needtime:0,
-    hourDifference: 0,
     status: '',
     modifyPermission: true,
     modifyPermissionOfResearch: true,
-    mapping : {
+    mapping: {
       '内科': { '正高': 60, '副高': 60, '中级': 40 },
         '外科': { '正高': 60, '副高': 60, '中级': 40 },
         '妇产科': { '正高': 60, '副高': 60, '中级': 40 },
@@ -106,6 +105,73 @@ Component({
         title: '提交成功',
         icon: 'success'
       })
+    },
+
+    changeJobTitle(e) {
+      const index = e.detail.value; // 这是索引值 0, 1, 2
+      const titleOptions = ['正高', '副高', '中级'];
+      const newTitle = titleOptions[index]; // 将索引转换为实际职称名称
+      const that = this;
+      
+      // 更新本地数据
+      that.setData({
+        jobtitle: newTitle
+      });
+      
+      // 重新计算需要的学时
+      const department = that.data.department;
+      const time = that.data.mapping[department]?.[newTitle];
+      const needtime = time !== undefined ? time : 0;
+      
+      that.setData({
+        needtime: needtime
+      });
+      
+      
+      // 保存到数据库
+      wx.getStorage({
+        key: 'my_data',
+        success(res) {
+          const _id = res.data._id;
+          const db = wx.cloud.database();
+          
+          // 更新职称信息
+          db.collection('WorkhoursData').doc(_id).update({
+            data: {
+              'hours.job.1.hour': newTitle // 假设 job[1] 是职称信息
+            },
+            success() {
+              // 显示成功提示
+              wx.showToast({
+                title: '职称已更新',
+                icon: 'success',
+                duration: 2000
+              });
+              
+              // 更新小程序存储的数据
+              wx.getStorage({
+                key: 'hours',
+                success(hoursRes) {
+                  const hours = hoursRes.data;
+                  hours.job[1].hour = newTitle;
+                  
+                  wx.setStorage({
+                    key: 'hours',
+                    data: hours
+                  });
+                }
+              });
+            },
+            fail() {
+              wx.showToast({
+                title: '更新失败',
+                icon: 'none',
+                duration: 2000
+              });
+            }
+          });
+        }
+      });
     }
   },
   // lifetimes: {
@@ -163,6 +229,7 @@ Component({
   //     在这里写一段代码，完成这个功能，mapping[department.hour]?.[jobtitle.hour];，并且将匹配到的值赋值给needtime
   //   }
   // }
+  
   created() {
     // 已有的初始化代码
     const summationUtil = require('../../utils/summationUtil')
@@ -225,17 +292,26 @@ Component({
     // 从组件的data中获取department和jobtitle
     const department = this.data.department;
     const jobtitle = this.data.jobtitle;
+    const titleOptions = ['正高', '副高', '中级'];
+    
+    // 计算当前职称的索引
+    const jobTitleIndex = titleOptions.indexOf(jobtitle);
+    
     // 使用department和jobtitle来查找mapping中对应的时间
-    const time = this.data.mapping[department]?.[jobtitle];
+    const time = this.data.mapping[department as keyof typeof this.data.mapping]?.[jobtitle as '正高' | '副高' | '中级'];
   
     // 检查是否找到了对应的时间，如果没有找到，可以根据需要设置一个默认值
     const needtime = time !== undefined ? time : 0; // 如果没有找到对应的时间，这里示例将needtime设置为0
   
     // 将查找到的时间（或默认值）赋值给needtime
     this.setData({
-      needtime: needtime
+      needtime: needtime,
+      titleOptions: titleOptions,
+      jobTitleIndex: jobTitleIndex >= 0 ? jobTitleIndex : 0 // 如果找不到，默认选第一个
     });
 
   }
 },
 )
+
+
