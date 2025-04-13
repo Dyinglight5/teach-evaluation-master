@@ -6,7 +6,7 @@ Component({
    * 组件的属性列表
    */
   properties: {
-
+    
   },
 
   /**
@@ -14,6 +14,7 @@ Component({
    */
   data: {
     hours: [] as any,
+    _id:'',
     activeNames: ['1'],
     modifyPermission: false,
     modifyPermissionOfResearch: false,
@@ -42,7 +43,7 @@ Component({
     showDate: false,
     addStudentId: 1,
     //带教的时间（年份）
-    studentYear: '',
+    studentYear: '1',
     //带教的时间（天数）
     studentDays: ''
   },
@@ -51,11 +52,541 @@ Component({
    * 组件的方法列表
    */
   methods: {
+    
     //id 1-3 输入学生的年份
+    // onDeleteStudent1(event: WechatMiniprogram.TouchEvent): void {
+    //   const studentId = event.currentTarget.dataset.id as string;  // 明确类型为string
+    //   // console.log("要删除的学生ID是：" + studentId);
+      
+    //   // 定义云数据库和目标集合
+    //   const db = wx.cloud.database();
+    //   const teachCollection = db.collection('WorkhoursData');
+      
+    //   // 获取_id值
+    //   const _id = this.data._id;
+    
+    //   // 检查_id是否存在
+    //   if (!_id) {
+    //     console.error("未指定有效的文档ID");
+    //     wx.showToast({
+    //       title: '未指定文档ID',
+    //       icon: 'none',
+    //       duration: 2000
+    //     });
+    //     return;
+    //   }
+    
+    //   // 尝试获取文档
+    //   teachCollection.doc(_id).get().then(res => {
+    //     console.log('找到文档：', res.data);
+    //     // 继续进行删除操作
+    //     const updateCommand = db.command;
+    //     teachCollection.doc(_id).update({
+    //       data: {
+    //         "hours.clinical_teaching.0.students": updateCommand.pull({
+    //           id: studentId  // 根据 id 匹配并删除该学生
+    //         })
+    //       }
+    //     }).then(res => {
+    //       if (res.stats.updated) {
+    //         console.log('学生删除成功');
+    //         wx.showToast({
+    //           title: '删除成功',
+    //           icon: 'success',
+    //           duration: 2000
+    //         });
+    //         // 更新本地数据
+    //         this.data.hours.forEach((item: any, index: number) => {
+    //           if (item.students) {
+    //             const idx = item.students.findIndex((s: any) => s.id === studentId);
+    //             if (idx !== -1) {
+    //               item.students.splice(idx, 1);  // 从数组中移除学生
+    //               this.setData({ [`hours[${index}]`]: item });  // 更新数据绑定
+    //             }
+    //           }
+    //         });
+    //         this.processData();  // 重新计算时间
+    //       } else {
+    //         console.log('未找到匹配的学生或删除失败');
+    //         wx.showToast({
+    //           title: '删除失败',
+    //           icon: 'none',
+    //           duration: 2000
+    //         });
+    //       }
+    //     }).catch(err => {
+    //       console.error("更新文档时发生错误：", err);
+    //       wx.showToast({
+    //         title: '更新过程出错',
+    //         icon: 'none',
+    //         duration: 2000
+    //       });
+    //     });
+    //   }).catch(err => {
+    //     console.error("未找到指定的文档：", err);
+    //     wx.showToast({
+    //       title: '未找到文档',
+    //       icon: 'none',
+    //       duration: 2000
+    //     });
+    //   });
+    // },
+    // onDeleteStudent2(event: WechatMiniprogram.TouchEvent): void {
+    //   const studentId = event.currentTarget.dataset.id as string;  // 明确类型为string
+    //   // console.log("要删除的学生ID是：" + studentId);
+      
+    //   // 定义云数据库和目标集合
+    //   const db = wx.cloud.database();
+    //   const teachCollection = db.collection('WorkhoursData');
+      
+    //   // 获取_id值
+    //   const _id = this.data._id;
+    
+    //   // 检查_id是否存在
+    //   if (!_id) {
+    //     console.error("未指定有效的文档ID");
+    //     wx.showToast({
+    //       title: '未指定文档ID',
+    //       icon: 'none',
+    //       duration: 2000
+    //     });
+    //     return;
+    //   }
+    
+    //   // 尝试获取文档
+    //   teachCollection.doc(_id).get().then(res => {
+    //     console.log('找到文档：', res.data);
+    //     // 继续进行删除操作
+    //     const updateCommand = db.command;
+    //     teachCollection.doc(_id).update({
+    //       data: {
+    //         "hours.clinical_teaching.1.students": updateCommand.pull({
+    //           id: studentId  // 根据 id 匹配并删除该学生
+    //         })
+    //       }
+    //     }).then(res => {
+    //       if (res.stats.updated) {
+    //         console.log('学生删除成功');
+    //         wx.showToast({
+    //           title: '删除成功',
+    //           icon: 'success',
+    //           duration: 2000
+    //         });
+    //         // 更新本地数据
+    //         this.data.hours.forEach((item: any, index: number) => {
+    //           if (item.students) {
+    //             const idx = item.students.findIndex((s: any) => s.id === studentId);
+    //             if (idx !== -1) {
+    //               item.students.splice(idx, 1);  // 从数组中移除学生
+    //               this.setData({ [`hours[${index}]`]: item });  // 更新数据绑定
+    //             }
+    //           }
+    //         });
+    //         this.processData();  // 重新计算时间
+    //       } else {
+    //         console.log('未找到匹配的学生或删除失败');
+    //         wx.showToast({
+    //           title: '删除失败',
+    //           icon: 'none',
+    //           duration: 2000
+    //         });
+    //       }
+    //     }).catch(err => {
+    //       console.error("更新文档时发生错误：", err);
+    //       wx.showToast({
+    //         title: '更新过程出错',
+    //         icon: 'none',
+    //         duration: 2000
+    //       });
+    //     });
+    //   }).catch(err => {
+    //     console.error("未找到指定的文档：", err);
+    //     wx.showToast({
+    //       title: '未找到文档',
+    //       icon: 'none',
+    //       duration: 2000
+    //     });
+    //   });
+    // },
+    // onDeleteStudent3(event: WechatMiniprogram.TouchEvent): void {
+    //   const studentId = event.currentTarget.dataset.id as string;  // 明确类型为string
+    //   // console.log("要删除的学生ID是：" + studentId);
+      
+    //   // 定义云数据库和目标集合
+    //   const db = wx.cloud.database();
+    //   const teachCollection = db.collection('WorkhoursData');
+      
+    //   // 获取_id值
+    //   const _id = this.data._id;
+    
+    //   // 检查_id是否存在
+    //   if (!_id) {
+    //     console.error("未指定有效的文档ID");
+    //     wx.showToast({
+    //       title: '未指定文档ID',
+    //       icon: 'none',
+    //       duration: 2000
+    //     });
+    //     return;
+    //   }
+    
+    //   // 尝试获取文档
+    //   teachCollection.doc(_id).get().then(res => {
+    //     console.log('找到文档：', res.data);
+    //     // 继续进行删除操作
+    //     const updateCommand = db.command;
+    //     teachCollection.doc(_id).update({
+    //       data: {
+    //         "hours.clinical_teaching.2.students": updateCommand.pull({
+    //           id: studentId  // 根据 id 匹配并删除该学生
+    //         })
+    //       }
+    //     }).then(res => {
+    //       if (res.stats.updated) {
+    //         console.log('学生删除成功');
+    //         wx.showToast({
+    //           title: '删除成功',
+    //           icon: 'success',
+    //           duration: 2000
+    //         });
+    //         // 更新本地数据
+    //         this.data.hours.forEach((item: any, index: number) => {
+    //           if (item.students) {
+    //             const idx = item.students.findIndex((s: any) => s.id === studentId);
+    //             if (idx !== -1) {
+    //               item.students.splice(idx, 1);  // 从数组中移除学生
+    //               this.setData({ [`hours[${index}]`]: item });  // 更新数据绑定
+    //             }
+    //           }
+    //         });
+    //         this.processData();  // 重新计算时间
+    //       } else {
+    //         console.log('未找到匹配的学生或删除失败');
+    //         wx.showToast({
+    //           title: '删除失败',
+    //           icon: 'none',
+    //           duration: 2000
+    //         });
+    //       }
+    //     }).catch(err => {
+    //       console.error("更新文档时发生错误：", err);
+    //       wx.showToast({
+    //         title: '更新过程出错',
+    //         icon: 'none',
+    //         duration: 2000
+    //       });
+    //     });
+    //   }).catch(err => {
+    //     console.error("未找到指定的文档：", err);
+    //     wx.showToast({
+    //       title: '未找到文档',
+    //       icon: 'none',
+    //       duration: 2000
+    //     });
+    //   });
+    // },
+    // onDeleteStudent4(event: WechatMiniprogram.TouchEvent): void {
+    //   const studentId = event.currentTarget.dataset.id as string;  // 明确类型为string
+    //   // console.log("要删除的学生ID是：" + studentId);
+      
+    //   // 定义云数据库和目标集合
+    //   const db = wx.cloud.database();
+    //   const teachCollection = db.collection('WorkhoursData');
+      
+    //   // 获取_id值
+    //   const _id = this.data._id;
+    
+    //   // 检查_id是否存在
+    //   if (!_id) {
+    //     console.error("未指定有效的文档ID");
+    //     wx.showToast({
+    //       title: '未指定文档ID',
+    //       icon: 'none',
+    //       duration: 2000
+    //     });
+    //     return;
+    //   }
+    
+    //   // 尝试获取文档
+    //   teachCollection.doc(_id).get().then(res => {
+    //     console.log('找到文档：', res.data);
+    //     // 继续进行删除操作
+    //     const updateCommand = db.command;
+    //     teachCollection.doc(_id).update({
+    //       data: {
+    //         "hours.clinical_teaching.3.students": updateCommand.pull({
+    //           id: studentId  // 根据 id 匹配并删除该学生
+    //         })
+    //       }
+    //     }).then(res => {
+    //       if (res.stats.updated) {
+    //         console.log('学生删除成功');
+    //         wx.showToast({
+    //           title: '删除成功',
+    //           icon: 'success',
+    //           duration: 2000
+    //         });
+    //         // 更新本地数据
+    //         this.data.hours.forEach((item: any, index: number) => {
+    //           if (item.students) {
+    //             const idx = item.students.findIndex((s: any) => s.id === studentId);
+    //             if (idx !== -1) {
+    //               item.students.splice(idx, 1);  // 从数组中移除学生
+    //               this.setData({ [`hours[${index}]`]: item });  // 更新数据绑定
+    //             }
+    //           }
+    //         });
+    //         this.processData();  // 重新计算时间
+    //       } else {
+    //         console.log('未找到匹配的学生或删除失败');
+    //         wx.showToast({
+    //           title: '删除失败',
+    //           icon: 'none',
+    //           duration: 2000
+    //         });
+    //       }
+    //     }).catch(err => {
+    //       console.error("更新文档时发生错误：", err);
+    //       wx.showToast({
+    //         title: '更新过程出错',
+    //         icon: 'none',
+    //         duration: 2000
+    //       });
+    //     });
+    //   }).catch(err => {
+    //     console.error("未找到指定的文档：", err);
+    //     wx.showToast({
+    //       title: '未找到文档',
+    //       icon: 'none',
+    //       duration: 2000
+    //     });
+    //   });
+    // },
+
+    // onDeleteStudent5(event: WechatMiniprogram.TouchEvent): void {
+    //   const studentId = event.currentTarget.dataset.id as string;  // 明确类型为string
+    //   // console.log("要删除的学生ID是：" + studentId);
+      
+    //   // 定义云数据库和目标集合
+    //   const db = wx.cloud.database();
+    //   const teachCollection = db.collection('WorkhoursData');
+      
+    //   // 获取_id值
+    //   const _id = this.data._id;
+    
+    //   // 检查_id是否存在
+    //   if (!_id) {
+    //     console.error("未指定有效的文档ID");
+    //     wx.showToast({
+    //       title: '未指定文档ID',
+    //       icon: 'none',
+    //       duration: 2000
+    //     });
+    //     return;
+    //   }
+    
+    //   // 尝试获取文档
+    //   teachCollection.doc(_id).get().then(res => {
+    //     console.log('找到文档：', res.data);
+    //     // 继续进行删除操作
+    //     const updateCommand = db.command;
+    //     teachCollection.doc(_id).update({
+    //       data: {
+    //         "hours.clinical_teaching.4.students": updateCommand.pull({
+    //           id: studentId  // 根据 id 匹配并删除该学生
+    //         })
+    //       }
+    //     }).then(res => {
+    //       if (res.stats.updated) {
+    //         console.log('学生删除成功');
+    //         wx.showToast({
+    //           title: '删除成功',
+    //           icon: 'success',
+    //           duration: 2000
+    //         });
+    //         // 更新本地数据
+    //         this.data.hours.forEach((item: any, index: number) => {
+    //           if (item.students) {
+    //             const idx = item.students.findIndex((s: any) => s.id === studentId);
+    //             if (idx !== -1) {
+    //               item.students.splice(idx, 1);  // 从数组中移除学生
+    //               this.setData({ [`hours[${index}]`]: item });  // 更新数据绑定
+    //             }
+    //           }
+    //         });
+    //         this.processData();  // 重新计算时间
+    //       } else {
+    //         console.log('未找到匹配的学生或删除失败');
+    //         wx.showToast({
+    //           title: '删除失败',
+    //           icon: 'none',
+    //           duration: 2000
+    //         });
+    //       }
+    //     }).catch(err => {
+    //       console.error("更新文档时发生错误：", err);
+    //       wx.showToast({
+    //         title: '更新过程出错',
+    //         icon: 'none',
+    //         duration: 2000
+    //       });
+    //     });
+    //   }).catch(err => {
+    //     console.error("未找到指定的文档：", err);
+    //     wx.showToast({
+    //       title: '未找到文档',
+    //       icon: 'none',
+    //       duration: 2000
+    //     });
+    //   });
+    // },
+    // onDeleteStudent6(event: WechatMiniprogram.TouchEvent): void {
+    //   const studentId = event.currentTarget.dataset.id as string;  // 明确类型为string
+    //   // console.log("要删除的学生ID是：" + studentId);
+      
+    //   // 定义云数据库和目标集合
+    //   const db = wx.cloud.database();
+    //   const teachCollection = db.collection('WorkhoursData');
+      
+    //   // 获取_id值
+    //   const _id = this.data._id;
+    
+    //   // 检查_id是否存在
+    //   if (!_id) {
+    //     console.error("未指定有效的文档ID");
+    //     wx.showToast({
+    //       title: '未指定文档ID',
+    //       icon: 'none',
+    //       duration: 2000
+    //     });
+    //     return;
+    //   }
+    
+    //   // 尝试获取文档
+    //   teachCollection.doc(_id).get().then(res => {
+    //     console.log('找到文档：', res.data);
+    //     // 继续进行删除操作
+    //     const updateCommand = db.command;
+    //     teachCollection.doc(_id).update({
+    //       data: {
+    //         "hours.clinical_teaching.5.students": updateCommand.pull({
+    //           id: studentId  // 根据 id 匹配并删除该学生
+    //         })
+    //       }
+    //     }).then(res => {
+    //       if (res.stats.updated) {
+    //         console.log('学生删除成功');
+    //         wx.showToast({
+    //           title: '删除成功',
+    //           icon: 'success',
+    //           duration: 2000
+    //         });
+    //         // 更新本地数据
+    //         this.data.hours.forEach((item: any, index: number) => {
+    //           if (item.students) {
+    //             const idx = item.students.findIndex((s: any) => s.id === studentId);
+    //             if (idx !== -1) {
+    //               item.students.splice(idx, 1);  // 从数组中移除学生
+    //               this.setData({ [`hours[${index}]`]: item });  // 更新数据绑定
+    //             }
+    //           }
+    //         });
+    //         this.processData();  // 重新计算时间
+    //       } else {
+    //         console.log('未找到匹配的学生或删除失败');
+    //         wx.showToast({
+    //           title: '删除失败',
+    //           icon: 'none',
+    //           duration: 2000
+    //         });
+    //       }
+    //     }).catch(err => {
+    //       console.error("更新文档时发生错误：", err);
+    //       wx.showToast({
+    //         title: '更新过程出错',
+    //         icon: 'none',
+    //         duration: 2000
+    //       });
+    //     });
+    //   }).catch(err => {
+    //     console.error("未找到指定的文档：", err);
+    //     wx.showToast({
+    //       title: '未找到文档',
+    //       icon: 'none',
+    //       duration: 2000
+    //     });
+    //   });
+    // },
+    onDeleteStudent(event: WechatMiniprogram.TouchEvent): void {
+      const studentId = event.currentTarget.dataset.id as string;  // 学生 ID
+      const groupId = event.currentTarget.dataset.group; // 组别 ID，对应 clinical_teaching 下的索引
+    
+      const db = wx.cloud.database();
+      const teachCollection = db.collection('WorkhoursData');
+      const _id = this.data._id;
+    
+      if (!_id) {
+        console.error("未指定有效的文档ID");
+        wx.showToast({
+          title: '未指定文档ID',
+          icon: 'none',
+          duration: 2000
+        });
+        return;
+      }
+    
+      // 尝试获取文档
+      teachCollection.doc(_id).get().then(res => {
+        const updateCommand = db.command;
+        // 动态建立路径字符串
+        const path = `hours.clinical_teaching.${groupId - 1}.students`;
+        teachCollection.doc(_id).update({
+          data: {
+            [path]: updateCommand.pull({ id: studentId })
+          }
+        }).then(res => {
+          if (res.stats.updated) {
+            console.log('学生删除成功');
+            wx.showToast({
+              title: '删除成功',
+              icon: 'success',
+              duration: 2000
+            });
+            // 更新本地数据
+            this.data.hours[groupId - 1].students = this.data.hours[groupId - 1].students.filter((s: any) => s.id !== studentId);
+            this.setData({ [`hours[${groupId - 1}]`]: this.data.hours[groupId - 1] });
+            this.processData();
+          } else {
+            console.log('未找到匹配的学生或删除失败');
+            wx.showToast({
+              title: '删除失败',
+              icon: 'none',
+              duration: 2000
+            });
+          }
+        }).catch(err => {
+          console.error("更新文档时发生错误：", err);
+          wx.showToast({
+            title: '更新过程出错',
+            icon: 'none',
+            duration: 2000
+          });
+        });
+      }).catch(err => {
+        console.error("未找到指定的文档：", err);
+        wx.showToast({
+          title: '未找到文档',
+          icon: 'none',
+          duration: 2000
+        });
+      });
+    },
+
+
     onChangeStudentYear() {
-      this.setData({
-        studentYear: '1'
-      })
+      // this.setData({
+      //   studentYear: '1'
+      // })
     },
     //id 4-5 输入学生的天数
     onChangeStudentDay(event: any) {
@@ -64,101 +595,211 @@ Component({
       })
     },
     //点击确认添加学生的按钮（年份）
+    // addStudent() {
+    //   //检查是否为空
+    //   const data = this.data
+    //   const flag = (data.addStudentId < 4 && data.studentName.trim() != '' && data.studentNumber.trim() != '' && data.studentYear.trim() != '') || ((data.addStudentId == 4 || data.addStudentId == 5) && data.studentName.trim() != '' && data.studentNumber.trim() != '' && data.studentDays.trim() != '') || (data.addStudentId == 6 && data.studentName.trim() != '' && data.studentNumber.trim() != '')
+    //   if (!flag) {
+    //     wx.showToast({
+    //       title: '输入不能为空',
+    //       icon: 'error'
+    //     })
+    //     return
+    //   }
+    //   //检查数据库中是否有该学生
+    //   const db = wx.cloud.database()
+    //   const studentCollection = db.collection('students')
+    //   new Promise((resolve, reject) => {
+    //     if (data.addStudentId < 4) {
+    //       resolve(true)
+    //     } else {
+    //       studentCollection.where({
+    //         name: data.studentName,
+    //         id: data.studentNumber
+    //       }).get({
+    //         success(res) {
+    //           const data = res.data
+    //           if (data.length != 0) {
+    //             resolve(true)
+    //           } else {
+    //             reject(false)
+    //           }
+    //         }
+    //       })
+    //     }
+    //   }).then(() => {
+    //     //成功后将学生添加到本地中
+    //     let newHours = data.hours
+    //     if (data.addStudentId < 4) {
+    //       newHours[data.addStudentId - 1].students.push({
+    //         id: data.studentNumber,
+    //         name: data.studentName,
+    //         year: parseInt(data.studentYear)
+    //       })
+    //     } else if (data.addStudentId == 4 || data.addStudentId == 5) {
+    //       if (parseInt(data.studentDays) > 15) {
+    //         //大于15天就算作三周
+    //         newHours[data.addStudentId - 1].students.push({
+    //           id: data.studentNumber,
+    //           name: data.studentName,
+    //           year: 1
+    //         })
+    //       }
+    //     } else if (data.addStudentId == 6) {
+    //       const beginDateArr = data.beginDate.split('-')
+    //       const endDateArr = data.endDate.split('-')
+    //       newHours[data.addStudentId - 1].students.push({
+    //         id: data.studentNumber,
+    //         name: data.studentName,
+    //         year: parseInt(endDateArr[1]) - parseInt(beginDateArr[1])
+    //       })
+    //     }
+    //     console.log(newHours);
+    //     this.setData({
+    //       hours: newHours
+    //     })
+    //     wx.getStorage({
+    //       key: 'hours',
+    //       success(res) {
+    //         const hours = res.data
+    //         hours['clinical_teaching'] = newHours
+    //         wx.setStorage({
+    //           key: 'hours',
+    //           data: hours
+    //         })
+    //         const summationUtil = require('../../utils/summationUtil')
+    //         summationUtil.default.sumAllHours()
+    //       }
+    //     })
+    //     //清空输入框
+    //     this.setData({
+    //       studentName: '',
+    //       studentNumber: '',
+    //       studentDays: '',
+    //       studentYear: '1' // 保证studentYear永远是1不清空
+    //     })
+    //     this.initDate()
+    //     //关闭弹窗
+    //     this.onCloseAddStudentPopup()
+    //     //重新加载数据
+    //     this.processData()
+    //   }, () => {
+    //     //没有找到学生后提示
+    //     wx.showToast({
+    //       title: '学生不存在',
+    //       icon: 'error'
+    //     })
+    //   })
+    // },
     addStudent() {
-      //检查是否为空
-      const data = this.data
-      const flag = (data.addStudentId < 4 && data.studentName.trim() != '' && data.studentNumber.trim() != '' && data.studentYear.trim() != '') || ((data.addStudentId == 4 || data.addStudentId == 5) && data.studentName.trim() != '' && data.studentNumber.trim() != '' && data.studentDays.trim() != '') || (data.addStudentId == 6 && data.studentName.trim() != '' && data.studentNumber.trim() != '')
+      // 检查是否为空
+      const data = this.data;
+      const flag = (data.addStudentId < 4 && data.studentName.trim() != '' && data.studentNumber.trim() != '' && data.studentYear.trim() != '') || 
+                   ((data.addStudentId == 4 || data.addStudentId == 5) && data.studentName.trim() != '' && data.studentNumber.trim() != '' && data.studentDays.trim() != '') || 
+                   (data.addStudentId == 6 && data.studentName.trim() != '' && data.studentNumber.trim() != '');
       if (!flag) {
         wx.showToast({
           title: '输入不能为空',
           icon: 'error'
-        })
-        return
+        });
+        return;
       }
-      //检查数据库中是否有该学生
-      const db = wx.cloud.database()
-      const studentCollection = db.collection('students')
+    
+      // 检查数据库中是否有该学生
+      const db = wx.cloud.database();
+      const studentCollection = db.collection('students');
       new Promise((resolve, reject) => {
         if (data.addStudentId < 4) {
-          resolve(true)
+          resolve(true);
         } else {
+          // 打印查询条件
+          console.log('查询条件:', {
+            name: data.studentName.trim(),
+            id: new RegExp(`^${String(data.studentNumber).trim()}$`)
+          });
+    
           studentCollection.where({
-            name: data.studentName,
-            id: data.studentNumber
+            name: data.studentName.trim(),
+            id: new RegExp(`^${String(data.studentNumber).trim()}$`)
           }).get({
             success(res) {
-              const data = res.data
+              const data = res.data;
+              console.log('数据库查询结果:', res.data); // 打印数据库查询结果
               if (data.length != 0) {
-                resolve(true)
+                resolve(true);
               } else {
-                reject(false)
+                reject(false);
               }
+            },
+            fail(err) {
+              console.error('数据库查询错误:', err); // 打印数据库查询错误
+              reject(false);
             }
-          })
+          });
         }
       }).then(() => {
-        //成功后将学生添加到本地中
-        let newHours = data.hours
+        // 成功后将学生添加到本地中
+        let newHours = data.hours;
         if (data.addStudentId < 4) {
           newHours[data.addStudentId - 1].students.push({
-            id: data.studentNumber,
-            name: data.studentName,
+            id: String(data.studentNumber).trim(),
+            name: data.studentName.trim(),
             year: parseInt(data.studentYear)
-          })
+          });
         } else if (data.addStudentId == 4 || data.addStudentId == 5) {
           if (parseInt(data.studentDays) > 15) {
-            //大于15天就算作三周
+            // 大于15天就算作三周
             newHours[data.addStudentId - 1].students.push({
-              id: data.studentNumber,
-              name: data.studentName,
+              id: String(data.studentNumber).trim(),
+              name: data.studentName.trim(),
               year: 1
-            })
+            });
           }
         } else if (data.addStudentId == 6) {
-          const beginDateArr = data.beginDate.split('-')
-          const endDateArr = data.endDate.split('-')
+          const beginDateArr = data.beginDate.split('-');
+          const endDateArr = data.endDate.split('-');
           newHours[data.addStudentId - 1].students.push({
-            id: data.studentNumber,
-            name: data.studentName,
+            id: String(data.studentNumber).trim(),
+            name: data.studentName.trim(),
             year: parseInt(endDateArr[1]) - parseInt(beginDateArr[1])
-          })
+          });
         }
         console.log(newHours);
         this.setData({
           hours: newHours
-        })
+        });
         wx.getStorage({
           key: 'hours',
           success(res) {
-            const hours = res.data
-            hours['clinical_teaching'] = newHours
+            const hours = res.data;
+            hours['clinical_teaching'] = newHours;
             wx.setStorage({
               key: 'hours',
               data: hours
-            })
-            const summationUtil = require('../../utils/summationUtil')
-            summationUtil.default.sumAllHours()
+            });
+            const summationUtil = require('../../utils/summationUtil');
+            summationUtil.default.sumAllHours();
           }
-        })
-        //清空输入框
+        });
+        // 清空输入框
         this.setData({
           studentName: '',
           studentNumber: '',
           studentDays: '',
-          studentYear: ''
-        })
-        this.initDate()
-        //关闭弹窗
-        this.onCloseAddStudentPopup()
-        //重新加载数据
-        this.processData()
-      }, () => {
-        //没有找到学生后提示
+          studentYear: '1' // 保证studentYear永远是1不清空
+        });
+        this.initDate();
+        // 关闭弹窗
+        this.onCloseAddStudentPopup();
+        // 重新加载数据
+        this.processData();
+      }).catch(() => {
+        // 没有找到学生后提示
         wx.showToast({
           title: '学生不存在',
           icon: 'error'
-        })
-      })
+        });
+      });
     },
     //打开选择日期的弹窗
     onDisplayDate() {
@@ -196,6 +837,7 @@ Component({
         showEndDate: false
       })
     },
+
     //选择日期
     onInputDate(event: any) {
       const date = new Date(event.detail)
@@ -285,11 +927,15 @@ Component({
     //处理数据，计算出学时
     processData() {
       let data = this.data.hours;
+      console.log(data)
+
       data.forEach((item: any) => {
         let sum = 0;
-        item.students.forEach((student: any) => {
-          sum = sum + student.year
-        })
+        if (item.students != null) {
+          item.students.forEach((student: any) => {
+            sum = sum + student.year
+          })
+        }
         item.hour = item.coefficient * sum
       })
       this.setData({
@@ -306,6 +952,7 @@ Component({
       })
     }
   },
+
   lifetimes: {
     created() {
       this.initDate()
@@ -319,6 +966,7 @@ Component({
           db.collection('WorkhoursData').doc(_id).get({
             success(res) {
               that.setData({
+                _id:res.data._id,
                 modifyPermission: res.data.modifyPermission,
                 modifyPermissionOfResearch: res.data.modifyPermissionOfResearch
               })

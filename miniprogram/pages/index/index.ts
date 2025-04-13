@@ -16,32 +16,39 @@ Page({
     ],
     value1: 0,
     value2: 1,
+    findname:'',
     id: '',
     showingComponentNumber: 1,
     status: '',
     name: ''
   },
 
-  onChange(e: any) {
+  onChangename(e: any) {
+    this.setData({
+      findname: e.detail
+    });  
+  },
+  onChangeid(e: any) {
     this.setData({
       id: e.detail
-    });
-
+    });  
+    console.log(this.data.id)
   },
   //刷新一下组件
   updatePage() {
-    this.setData({
-      showingComponentNumber: 0
-    })
-    this.setData({
-      showingComponentNumber: 1
-    })
+    // this.setData({
+    //   showingComponentNumber: 0
+    // })
+    // this.setData({
+    //   showingComponentNumber: 1
+    // })
   },
   //搜索功能实现
   search() {
     //根据id搜索医生
     const searchDoctorUtil = require('../../utils/searchDoctorUtil')
-    searchDoctorUtil.default.searchDoctor(this.data.id)
+    console.log(this.data.findname)
+    searchDoctorUtil.default.searchDoctor(this.data.findname,this.data.id)
     //关闭下拉菜单
     const dropdownComponent = this.selectComponent('#searchItem');
     dropdownComponent.toggle(false)
@@ -49,6 +56,9 @@ Page({
       //搜索框置空
       this.setData({
         id: ''
+      })
+      this.setData({
+        findname: ''
       })
       this.onLoad()
     }, 500)

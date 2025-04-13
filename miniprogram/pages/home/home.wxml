@@ -6,7 +6,8 @@
 
   <view class="userInfo">
     <view class="status">{{ status }}</view>
-    <view wx:if="{{ name }}" class="name">昵称： {{ name }}</view>
+    <view wx:if="{{name && status == '医生'}}" class="name">昵称： {{ name }}</view>
+    <view wx:if="{{name && status == '教研室'}}" class="name">科室： {{ name }}</view>
   <view wx:if="{{ id }}" class="id">ID：{{ id }}</view>
   </view>
 </view>
@@ -32,6 +33,11 @@
 
 <view wx:if="{{ status == '教育教学部' }}" class="homeBox" bind:tap="chooseExceldoc">
   添加医生（Excel批量导入）
+  <van-icon name="arrow" custom-class="right" />
+</view>
+
+<view wx:if="{{ status == '教研室' }}" class="homeBox" bind:tap="downloadteachtime">
+  导出医生数据
   <van-icon name="arrow" custom-class="right" />
 </view>
 

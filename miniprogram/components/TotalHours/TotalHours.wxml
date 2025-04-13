@@ -1,15 +1,20 @@
 <!--components/TotalHours/TotalHours.wxml-->
 <van-row>
-  <van-col span="12">内容</van-col>
-  <van-col span="12">学时</van-col>
+  <van-col style="color: rgb(21, 94, 161);" span="12">{{ department }}</van-col>
+  <van-col style="color: rgb(21, 94, 161);" span="12">{{ jobtitle }}</van-col>
 </van-row>
 
+<!-- <van-row>
+  <van-col span="12">内容</van-col>
+  <van-col span="12">学时</van-col>
+</van-row> -->
+
 <van-row>
-  <van-col style="color: rgb(21, 94, 161);" span="12">{{ hours.name }}</van-col>
-  <van-col span="12">{{ hours.hour }}</van-col>
+  <van-col style="color: rgb(21, 94, 161);" span="12" >需完成总学时</van-col>
+  <van-col span="12">{{ needtime }}</van-col>
 </van-row>
 <van-row>
-  <van-col style="color: rgb(255, 0, 0);" span="12">{{ times.name }}</van-col>
+  <van-col style="color: rgb(255, 0, 0);" span="12">未完成学时</van-col>
   <van-col style="color: rgb(255, 0, 0);"span="12">{{ hourDifference }}</van-col>
 </van-row>
 <!-- 医生进行提交的按钮 -->

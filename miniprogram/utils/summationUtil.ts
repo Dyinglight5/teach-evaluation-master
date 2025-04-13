@@ -27,9 +27,11 @@ export default {
         const clinical_teaching = hours['clinical_teaching']
         clinical_teaching.forEach((item: any) => {
           let times = 0
-          item.students.forEach((item: any) => {
-            times = times + item.year
-          })
+          if(item.students != null){
+            item.students.forEach((item: any) => {
+              times = times + item.year
+            })
+          }
           sum = sum + times * item.coefficient
         })
         // console.log(sum);

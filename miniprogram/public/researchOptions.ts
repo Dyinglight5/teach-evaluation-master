@@ -118,6 +118,10 @@ export default [
       {
         "text": "健康管理",
         "value": "028"
+      },
+      {
+        "text": "眼",
+        "value": "029"
       }
     ]
   },

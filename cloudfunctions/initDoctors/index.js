@@ -10,7 +10,7 @@ exports.main = async (event, context) => {
     '内科': { '正高': 60, '副高': 60, '中级': 40 },
       '外科': { '正高': 60, '副高': 60, '中级': 40 },
       '妇产科': { '正高': 60, '副高': 60, '中级': 40 },
-      '二科': { '正高': 60, '副高': 60, '中级': 40 },
+      '儿科': { '正高': 60, '副高': 60, '中级': 40 },
       '神经精神': { '正高': 60, '副高': 60, '中级': 40 },
       '中西医结合': { '正高': 60, '副高': 60, '中级': 40 },
       '眼': { '正高': 30, '副高': 30, '中级': 20 },
@@ -66,7 +66,7 @@ exports.main = async (event, context) => {
           id: row[1] + '', //工号
           exams: [], //默认考试列表为空
           modifyPermission: true,
-          modifyPermissionOfResarch: true,
+          modifyPermissionOfResearch: true,
           password: 'yisheng', //默认密码
           hours: {
             clinical_teaching: [{
@@ -362,9 +362,19 @@ exports.main = async (event, context) => {
               name: '总学时'
             }, 
             {
-              hour: teachtime,//标准教学量时间
+              hour: teachtime,
               id: 2,
-              name: '剩余需完成学时'
+              name: '需完成学时'
+            }, ],
+            job: [{
+              hour: row[44],
+              id: 1,
+              name: '科室'
+            }, 
+            {
+              hour: row[45],
+              id: 2,
+              name: '职称'
             }, ]
           }
         })

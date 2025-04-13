@@ -10,10 +10,50 @@ Page({
     id: '',
     image: 'https://ts3.cn.mm.bing.net/th?id=OIP-C.g5M-iZUiocFCi9YAzojtRAAAAA&w=250&h=250&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2'
   },
+  downloadteachtime(): void {
+    wx.cloud.callFunction({
+      name: 'outDoctors', // 确保这里的云函数名称与你部署的云函数名称一致
+      data: {
+        department:this.data.name
+      },
+      success: (res: any) => { // 使用 any 类型来避免 TypeScript 错误，对于更精确的类型定义，需要根据实际返回值来定义
+        console.log('云函数调用成功，返回数据：', res.result);
+        if (res.result?.success) {
+          console.log('文件成功上传，文件ID：', res.result.fileID);
+          
+          wx.cloud.downloadFile({
+            fileID: res.result.fileID, // 使用 ?. 操作符确保 fileID 存在
+            success: (downloadRes: any) => { // 同样，这里使用 any，实际项目中应根据具体情况定义类型
+              console.log('下载文件成功', downloadRes.tempFilePath);
+              wx.openDocument({
+                filePath: downloadRes.tempFilePath,
+                showMenu: true, 
+                success: () => {
+                  console.log('打开文档成功');
+                },
+                fail: (err: any) => {
+                  console.error('打开文档失败：', err);
+                }
+              });
+            },
+            fail: (err: any) => {
+              console.error('下载文件失败：', err);
+            }
+          });
+        } else {
+          console.error('云函数执行失败：', res.result?.message);
+        }
+      },
+      fail: (err: any) => {
+        console.error('云函数调用失败：', err);
+      }
+    });
+  },
+
   //展示教学量文件
   ViewPDF(){
     wx.cloud.downloadFile({
-      fileID: "cloud://cloud1-5g9hp9d4688324e0.636c-cloud1-5g9hp9d4688324e0-1321670010/大连医科大学附属第一医院文件.pdf", // 云文件路径
+      fileID: "cloud://cloud1-5g9hp9d4688324e0.636c-cloud1-5g9hp9d4688324e0-1321670010/基础学时最低标准.pdf", // 云文件路径
       success: res => {
         // 下载成功后的临时路径
         console.log('下载文件成功', res.tempFilePath);
@@ -160,7 +200,7 @@ Page({
               })
             }
           })
-        } else if (that.data.status == '教研部') {
+        } else if (that.data.status == '教研室') {
           researchCollection.where({
             name: that.data.name
           }).get({
@@ -304,7 +344,7 @@ Page({
         that.setData({
           status: status
         })
-        if (status == '教研部') {
+        if (status == '教研室') {
           wx.getStorage({
             key: 'researchName',
             success(res) {
