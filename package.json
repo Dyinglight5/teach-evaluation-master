@@ -11,6 +11,7 @@
   "main": ".eslintrc.js",
   "description": "",
   "dependencies": {
-    "@vant/weapp": "^1.11.1"
+    "@vant/weapp": "^1.11.1",
+    "wx-server-sdk": "^3.0.1"
   }
 }

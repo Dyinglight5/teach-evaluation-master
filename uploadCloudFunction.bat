@@ -1,0 +1,1 @@
+"D:\微信web开发者工具\cli.bat" cloud functions deploy --e cloud1-5g9hp9d4688324e0 --n resetYearlyHours --r --project "D:\微信web开发者工具\Project\teach-evaluation-master\teach-evaluation-master" --report_first --report
