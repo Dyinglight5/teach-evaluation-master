@@ -12,7 +12,8 @@
     "Honor": "../../components/Honor/Honor",
     "OtherHours": "../../components/OtherHours/OtherHours",
     "TotalHours": "../../components/TotalHours/TotalHours",
-    "ShowHours": "../../components/ShowHours/ShowHours"
+    "ShowHours": "../../components/ShowHours/ShowHours",
+    "HistoryRecords": "../../components/HistoryRecords/HistoryRecords"
   },
   "backgroundTextStyle": "dark",
   "enablePullDownRefresh": true,

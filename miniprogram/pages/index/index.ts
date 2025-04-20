@@ -12,7 +12,8 @@ Page({
       { text: '教学研究', value: 4 },
       { text: '荣誉', value: 5 },
       { text: '其他', value: 6 },
-      { text: '总学时', value: 7 }
+      { text: '总学时', value: 7 },
+      { text: '历史学时', value: 8 }
     ],
     value1: 0,
     value2: 1,
@@ -116,6 +117,11 @@ Page({
       case 7:
         this.setData({
           showingComponentNumber: 8
+        })
+        break;
+      case 8:
+        this.setData({
+          showingComponentNumber: 9
         })
         break;
     }

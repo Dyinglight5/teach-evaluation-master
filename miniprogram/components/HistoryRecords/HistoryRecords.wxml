@@ -1,0 +1,69 @@
+<!-- components/HistoryRecords/HistoryRecords.wxml -->
+<view class="container">
+  <!-- 用户基本信息 -->
+  <view class="header-info">
+    <van-row>
+      <van-col span="24">
+        <text class="user-name">{{ userName }}</text>
+      </van-col>
+    </van-row>
+    <van-row wx:if="{{hasRecords}}">
+      <van-col style="color: rgb(21, 94, 161);" span="12">{{ department }}</van-col>
+      <van-col style="color: rgb(21, 94, 161);" span="12">{{ jobtitle }}</van-col>
+    </van-row>
+  </view>
+  
+  <!-- 年份选择器 -->
+  <view class="year-selector">
+    <text>选择查询年份: </text>
+    <picker mode="selector" range="{{yearOptions}}" bindchange="changeYear">
+      <view class="picker">
+        {{selectedYear}} <van-icon name="arrow-down" />
+      </view>
+    </picker>
+  </view>
+  
+  <!-- 加载中状态 -->
+  <view wx:if="{{isLoading}}" class="loading-container">
+    <van-loading type="spinner" color="#1989fa" />
+    <text class="loading-text">加载数据中...</text>
+  </view>
+  
+  <!-- 有历史记录时显示 -->
+  <view wx:elif="{{hasRecords}}" class="history-container">
+    <view class="history-title">{{selectedYear}}年度学时统计</view>
+    
+    <van-cell-group>
+      <van-cell title="更新日期" value="{{historyRecords[0].updatedAtFormatted || '未知'}}" />
+      <van-cell title="部门" value="{{historyRecords[0].department}}" />
+      <van-cell title="职称" value="{{historyRecords[0].jobtitle}}" />
+      <van-cell title="完成学时" value="{{historyRecords[0].completedHours}} 学时" />
+      <van-cell title="得分" value="{{historyRecords[0].score}} 分" />
+    </van-cell-group>
+    
+    <!-- 详细记录卡片 -->
+    <view class="detail-card" wx:if="{{historyRecords.length > 0}}">
+      <view class="card-title">详细信息</view>
+      <view class="card-content">
+        <view class="detail-item">
+          <text class="label">年份:</text>
+          <text class="value">{{historyRecords[0].year}}</text>
+        </view>
+        <view class="detail-item">
+          <text class="label">完成学时:</text>
+          <text class="value">{{historyRecords[0].completedHours}} 学时</text>
+        </view>
+        <view class="detail-item">
+          <text class="label">评分:</text>
+          <text class="value">{{historyRecords[0].score}} 分</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 无历史记录时显示 -->
+  <view wx:else class="no-data-container">
+    <van-empty description="暂无历史记录" />
+    <text class="no-data-text">{{selectedYear}}年度未找到学时记录</text>
+  </view>
+</view>

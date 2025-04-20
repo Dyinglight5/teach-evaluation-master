@@ -1,25 +1,20 @@
-<!--index.wxml-->
+<!-- index.wxml -->
 <van-dropdown-menu custom-class="dropdown" active-color="#1989fa">
   <van-dropdown-item bind:change="changeValue" value="{{ value1 }}" options="{{ option1 }}" />
-  <van-dropdown-item wx:if="{{ status == '教研室' || status == '教育教学部' }}" id="searchItem" bind:change="closeSearch" value="{{ value2 }}" title="{{ '筛选' }}"> 
+  <van-dropdown-item wx:if="{{ status == '教研室' || status == '教育教学部' }}" id="searchItem" bind:change="closeSearch" value="{{ value2 }}" title="{{ '筛选' }}">
     <van-search custom-class="search-view" field-class="search" input-class="search-input" value="{{ findname }}" label="姓名" placeholder="请输入姓名" use-action-slot bind:change="onChangename" bind:search="onSearch">
       <view class="search-button" slot="action" bind:tap="onClick">搜索</view>
     </van-search>
     <van-search custom-class="search-view" field-class="search" input-class="search-input" value="{{ id }}" label="医生号" placeholder="请输入医生号码" use-action-slot bind:change="onChangeid" bind:search="onSearch">
       <view class="search-button" slot="action" bind:tap="onClick">搜索</view>
     </van-search>
-
     <!-- <van-cell-group>
     <van-cell wx:for="{{ internalMedicineList }}" wx:key="index" title="{{ item.name }}" bind:tap="onSelectItem"></van-cell>
   </van-cell-group> -->
-
   </van-dropdown-item>
 </van-dropdown-menu>
-
 <view class="name">医生姓名： {{ name }}</view>
-
 <!-- <ShowHours wx:if="{{ isShow }}"></ShowHours> -->
-
 <!-- 理论课展示 -->
 <TheoryCourse wx:if="{{ showingComponentNumber == 1 }}"></TheoryCourse>
 <!-- 实验课展示 -->
@@ -36,3 +31,5 @@
 <OtherHours wx:if="{{ showingComponentNumber == 7 }}"></OtherHours>
 <!-- 总学时 -->
 <TotalHours wx:if="{{ showingComponentNumber == 8 }}"></TotalHours>
+<!-- 历史学时 -->
+<HistoryRecords wx:if="{{ showingComponentNumber == 9 }}"></HistoryRecords>

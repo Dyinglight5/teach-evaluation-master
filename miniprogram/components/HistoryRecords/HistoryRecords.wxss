@@ -1,0 +1,122 @@
+/* components/HistoryRecords/HistoryRecords.wxss */
+
+.container {
+  padding: 20rpx;
+  background-color: #f7f8fa;
+  min-height: 80vh;
+}
+
+.header-info {
+  margin-bottom: 30rpx;
+  padding: 20rpx;
+  background-color: #fff;
+  border-radius: 8rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.user-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.year-selector {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background-color: #fff;
+  border-radius: 8rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.picker {
+  border: 1px solid #eee;
+  padding: 10rpx 20rpx;
+  border-radius: 8rpx;
+  min-width: 150rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 20rpx;
+  color: #1989fa;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300rpx;
+}
+
+.loading-text {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  color: #999;
+}
+
+.history-container {
+  background-color: #fff;
+  border-radius: 8rpx;
+  padding: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.history-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.detail-card {
+  margin-top: 30rpx;
+  background-color: #f9f9f9;
+  border-radius: 8rpx;
+  padding: 20rpx;
+}
+
+.card-title {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15rpx;
+  font-size: 28rpx;
+}
+
+.label {
+  color: #666;
+}
+
+.value {
+  color: #333;
+  font-weight: bold;
+}
+
+.no-data-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 0;
+}
+
+.no-data-text {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  color: #999;
+}
