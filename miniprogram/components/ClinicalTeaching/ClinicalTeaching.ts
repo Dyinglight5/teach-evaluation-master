@@ -696,7 +696,8 @@ Component({
       const data = this.data;
       const flag = (data.addStudentId < 4 && data.studentName.trim() != '' && data.studentNumber.trim() != '' && data.studentYear.trim() != '') || 
                    ((data.addStudentId == 4 || data.addStudentId == 5) && data.studentName.trim() != '' && data.studentNumber.trim() != '' && data.studentDays.trim() != '') || 
-                   (data.addStudentId == 6 && data.studentName.trim() != '' && data.studentNumber.trim() != '');
+                   (data.addStudentId == 6 && data.studentName.trim() != '' && data.studentNumber.trim() != '') ||
+                   (data.addStudentId == 7 && data.studentName.trim() != '' && data.studentNumber.trim() != '');
       if (!flag) {
         wx.showToast({
           title: '输入不能为空',
@@ -709,7 +710,7 @@ Component({
       const db = wx.cloud.database();
       const studentCollection = db.collection('students');
       new Promise((resolve, reject) => {
-        if (data.addStudentId < 4) {
+        if (data.addStudentId < 4 || data.addStudentId == 7) {
           resolve(true);
         } else {
           // 打印查询条件
@@ -740,7 +741,7 @@ Component({
       }).then(() => {
         // 成功后将学生添加到本地中
         let newHours = data.hours;
-        if (data.addStudentId < 4) {
+        if (data.addStudentId < 4 || data.addStudentId == 7) {
           newHours[data.addStudentId - 1].students.push({
             id: String(data.studentNumber).trim(),
             name: data.studentName.trim(),
@@ -993,9 +994,43 @@ Component({
         key: 'hours',
         success(res) {
           // console.log(res.data.clinical_teaching);
+          let clinicalTeachingData = res.data.clinical_teaching;
+          
+          // 检查是否缺少第7个项目"本科论文导师"
+          if (clinicalTeachingData.length < 7) {
+            clinicalTeachingData.push({
+              coefficient: 10,
+              id: 7,
+              hour: 0,
+              name: "本科论文导师",
+              students: []
+            });
+            
+            // 更新本地存储
+            let hours = res.data;
+            hours['clinical_teaching'] = clinicalTeachingData;
+            wx.setStorage({
+              key: 'hours',
+              data: hours
+            });
+            
+            // 同时更新数据库
+            wx.getStorage({
+              key: 'my_data',
+              success(userData) {
+                const _id = userData.data._id;
+                const db = wx.cloud.database();
+                db.collection('WorkhoursData').doc(_id).update({
+                  data: {
+                    'hours.clinical_teaching': clinicalTeachingData
+                  }
+                });
+              }
+            });
+          }
 
           that.setData({
-            hours: res.data.clinical_teaching
+            hours: clinicalTeachingData
           })
           that.processData()
         }

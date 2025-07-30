@@ -88,6 +88,12 @@ export default {
         "coefficient": 3,
         "id": 6,
         "students": []
+      },
+      {
+        "name": "本科论文导师",
+        "coefficient": 10,
+        "id": 7,
+        "students": []
       }
     ],
     "teaching_management": [{
