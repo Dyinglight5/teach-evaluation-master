@@ -1,13 +1,23 @@
-<!--components/OtherHours/OtherHours.wxml-->
+<!-- components/OtherHours/OtherHours.wxml -->
 <van-row>
   <van-col span="12">内容</van-col>
   <van-col span="12">学时</van-col>
 </van-row>
-
 <van-row>
   <van-col style="color: rgb(21, 94, 161);" span="12">{{ hours[0].name }}</van-col>
   <van-col style="color: rgb(202, 142, 29);" span="12">
     <text wx:if="{{ status == '医生' }}">{{ hours[0].hour }}</text>
     <van-stepper wx:else min="{{ 0 }}" custom-class="stepper" input-width="56px" button-size="40px" value="{{ hours[0].hour }}" data-index="{{ index }}" bind:change="onChange" />
+  </van-col>
+</van-row>
+<!-- 添加备注输入框 -->
+<van-row style="margin-top: 16px;">
+  <van-col span="24">
+    <!-- 备注标题，居中显示 -->
+    <view style="text-align: center; margin-bottom: 8px; font-size: 16px; color: #333;">备注</view>
+    <!-- 输入框容器 -->
+    <van-cell-group inset>
+      <van-field value="{{ remark }}" placeholder="请填写其他学时的具体原因" type="textarea" autosize="{{ {minHeight: 60, maxHeight: 120} }}" border="{{ true }}" bind:change="onRemarkChange" input-align="left" custom-style="padding: 12px;" />
+    </van-cell-group>
   </van-col>
 </van-row>

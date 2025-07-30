@@ -214,6 +214,7 @@ exports.main = async (event, context) => {
                 hour: row[14],
                 id: 1,
                 name: "其他",
+                remark: "", // 添加备注字段
               },
             ],
             teaching_management: [

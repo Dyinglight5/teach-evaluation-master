@@ -120,7 +120,7 @@ exports.main = async (event, context) => {
                     name: "国家级、省级、校级、院级课程",
                   },
                 ],
-                other: [{ hour: row[14], id: 1, name: "其他" }],
+                other: [{ hour: row[14], id: 1, name: "其他", remark: "" }],
                 teaching_management: [
                   {
                     coefficient: 15,
