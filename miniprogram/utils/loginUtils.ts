@@ -5,6 +5,11 @@ const teachingCollection = db.collection('TeachingDepartment')
 export default {
   //通过医生的身份登录
   loginAsDoctor(id: any, name: any) {
+    // 清除之前的教研室和教育教学部登录数据
+    wx.removeStorage({
+      key: 'researchName'
+    })
+    
     collection.where({
       id: id,
       name: name
@@ -47,7 +52,7 @@ export default {
         } else {
           wx.showToast({
             title: '请注册系统',
-            icon: 'error'
+            icon: 'none'
           })
         }
       }
@@ -56,6 +61,17 @@ export default {
 
   //通过教研室的身份登录
   loginAsResearch(name: any) {
+    // 清除之前的医生登录数据
+    wx.removeStorage({
+      key: 'my_data'
+    })
+    wx.removeStorage({
+      key: 'hours'
+    })
+    wx.removeStorage({
+      key: 'exams'
+    })
+    
     researchCollection.where({
       name: name
     }).get({
@@ -77,6 +93,20 @@ export default {
 
   //通过教学部身份登录
   loginAsEducation() {
+    // 清除之前的医生登录数据
+    wx.removeStorage({
+      key: 'my_data'
+    })
+    wx.removeStorage({
+      key: 'hours'
+    })
+    wx.removeStorage({
+      key: 'exams'
+    })
+    wx.removeStorage({
+      key: 'researchName'
+    })
+    
     teachingCollection.get({
       success(res) {
         console.log(res);

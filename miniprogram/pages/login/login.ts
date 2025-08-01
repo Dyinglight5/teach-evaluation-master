@@ -136,7 +136,7 @@ Page({
     if (this.checkIfNull()) {
       wx.showToast({
         title: '输入不能为空',
-        icon: 'error'
+        icon: 'none'
       })
       return;
     }
@@ -156,7 +156,7 @@ Page({
       
       wx.showToast({
         title: '密码输入错误',
-        icon: 'error'
+        icon: 'none'
       })
       return;
     }
@@ -179,13 +179,27 @@ Page({
         loginUtils.loginAsEducation()
       }
     }
+    
     wx.showToast({
       title: '登录成功',
       icon: 'success'
     })
-    wx.switchTab({
-      url: '../index/index'
-    })
+    
+    // 延迟跳转，确保数据保存完成
+    setTimeout(() => {
+      wx.switchTab({
+        url: '../index/index',
+        success: () => {
+          // 跳转成功后，通过事件或者重新加载来刷新首页数据
+          const pages = getCurrentPages();
+          const indexPage = pages.find(page => page.route === 'pages/index/index');
+          if (indexPage) {
+            // 如果首页已经存在，直接调用onLoad方法刷新数据
+            indexPage.onLoad();
+          }
+        }
+      })
+    }, 1000)
   },
 
   //号码记录

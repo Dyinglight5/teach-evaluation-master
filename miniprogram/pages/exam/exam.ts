@@ -114,7 +114,7 @@ Page({
     if (this.data.addExamName == '' || this.data.addExamPersonCeiling == '') {
       wx.showToast({
         title: '输入不能为空',
-        icon: 'error'
+        icon: 'none'
       })
       return
     }
@@ -209,7 +209,7 @@ Page({
     if (this.data.timeConflictFlag) {
       wx.showToast({
         title: '时间冲突',
-        icon: 'error'
+        icon: 'none'
       })
       return
     }
@@ -218,7 +218,8 @@ Page({
     // 关闭弹窗
     this.closeConfirmApplyExamPopup()
     //重新加载数据
-    this.onLoad()
+    this.getexamData();
+    this.loadUserData();
   },
 
   // 确认取消按钮点击事件
@@ -232,28 +233,72 @@ Page({
     // 关闭弹窗
     this.onCloseCancelApplyPopup()
     //重新加载数据
-    this.onLoad()
+    this.getexamData();
+    this.loadUserData();
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad() {
-    let that = this
     this.getexamData();
-    wx.getStorage({
-      key: 'my_data',
-      success(res) {
-        that.setData({
-          my_data: res.data
-        })
-      }
-    })
+    this.loadUserData();
+  },
+
+  /**
+   * 页面显示时的回调函数
+   */
+  onShow() {
+    // 页面显示时重新加载数据，确保登录后数据能及时更新
+    this.loadUserData()
+  },
+
+  /**
+   * 加载用户数据的通用方法
+   */
+  loadUserData() {
+    let that = this
     wx.getStorage({
       key: 'status',
       success(res) {
         that.setData({
           status: res.data
         })
+        
+        // 根据不同身份获取不同的用户数据
+        if (res.data === '医生') {
+          wx.getStorage({
+            key: 'my_data',
+            success(res) {
+              that.setData({
+                my_data: res.data
+              })
+            },
+            fail() {
+              // 如果没有医生数据，设置默认值
+              that.setData({
+                my_data: { name: '未登录', _id: '' }
+              })
+            }
+          })
+        } else if (res.data === '教研室') {
+          wx.getStorage({
+            key: 'researchName',
+            success(res) {
+              that.setData({
+                my_data: { name: res.data, _id: 'research' }
+              })
+            },
+            fail() {
+              that.setData({
+                my_data: { name: '教研室', _id: 'research' }
+              })
+            }
+          })
+        } else if (res.data === '教育教学部') {
+          that.setData({
+            my_data: { name: '教育教学部', _id: 'education' }
+          })
+        }
       }
     })
   },
@@ -262,7 +307,8 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-    this.onLoad()
+    this.getexamData();
+    this.loadUserData();
     wx.stopPullDownRefresh()
   }
 })

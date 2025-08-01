@@ -326,6 +326,21 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad() {
+    this.loadUserData()
+  },
+
+  /**
+   * 页面显示时的回调函数
+   */
+  onShow() {
+    // 页面显示时重新加载数据，确保登录后数据能及时更新
+    this.loadUserData()
+  },
+
+  /**
+   * 加载用户数据的通用方法
+   */
+  loadUserData() {
     let that = this
     wx.getStorage({
       key: 'image',
@@ -351,6 +366,11 @@ Page({
               that.setData({
                 name: res.data
               })
+            },
+            fail() {
+              that.setData({
+                name: '教研室'
+              })
             }
           })
           
@@ -363,7 +383,18 @@ Page({
                 name: doctorData.name,
                 id: doctorData.id
               })
+            },
+            fail() {
+              that.setData({
+                name: '未登录',
+                id: ''
+              })
             }
+          })
+        } else if (status == '教育教学部') {
+          that.setData({
+            name: '教育教学部',
+            id: 'education'
           })
         }
       }
@@ -381,7 +412,8 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    // 页面显示时重新加载数据，确保登录后数据能及时更新
+    this.loadUserData()
   },
 
   /**

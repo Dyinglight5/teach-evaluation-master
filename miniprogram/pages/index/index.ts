@@ -61,7 +61,7 @@ Page({
       this.setData({
         findname: ''
       })
-      this.onLoad()
+      this.loadUserData()
     }, 500)
   },
   //按下回车键触发
@@ -128,7 +128,6 @@ Page({
 
   },
   onLoad() {
-    let that = this
     // @ts-ignore
     if (wx.getUserProfile) {
       this.setData({
@@ -136,20 +135,63 @@ Page({
       })
     }
     this.updatePage()
+    this.loadUserData()
+  },
+
+  /**
+   * 页面显示时的回调函数
+   */
+  onShow() {
+    // 页面显示时重新加载数据，确保登录后数据能及时更新
+    this.loadUserData()
+  },
+
+  /**
+   * 加载用户数据的通用方法
+   */
+  loadUserData() {
+    let that = this
     wx.getStorage({
       key: 'status',
       success(res) {
         that.setData({
           status: res.data
         })
-      }
-    })
-    wx.getStorage({
-      key: 'my_data',
-      success(res) {
-        that.setData({
-          name: res.data.name
-        })
+        
+        // 根据不同身份获取不同的用户名
+        if (res.data === '医生') {
+          wx.getStorage({
+            key: 'my_data',
+            success(res) {
+              that.setData({
+                name: res.data.name
+              })
+            },
+            fail() {
+              that.setData({
+                name: '未登录'
+              })
+            }
+          })
+        } else if (res.data === '教研室') {
+          wx.getStorage({
+            key: 'researchName',
+            success(res) {
+              that.setData({
+                name: res.data
+              })
+            },
+            fail() {
+              that.setData({
+                name: '教研室'
+              })
+            }
+          })
+        } else if (res.data === '教育教学部') {
+          that.setData({
+            name: '教育教学部'
+          })
+        }
       }
     })
   },
@@ -158,7 +200,7 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-    this.onLoad()
+    this.loadUserData()
     wx.stopPullDownRefresh()
   }
 })
