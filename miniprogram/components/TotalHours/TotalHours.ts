@@ -19,6 +19,7 @@ Component({
     status: '',
     modifyPermission: true,
     modifyPermissionOfResearch: true,
+    submitStatus: 'draft', // 新增：提交状态 'draft' | 'submitted'
     mapping: {
       '内科': { '正高': 60, '副高': 60, '中级': 40, '初级': 20 },
       '外科': { '正高': 60, '副高': 60, '中级': 40, '初级': 20 },
@@ -99,12 +100,84 @@ Component({
       })
     },
 
-    submit() {
+    // 保存草稿方法
+    save() {
+      const that = this
       const submitDatabase = require('../../utils/submitDatabase')
-      submitDatabase.default.submitAllData()
-      wx.showToast({
-        title: '提交成功',
-        icon: 'success'
+      
+      // 保存数据但标记为草稿状态
+      submitDatabase.default.saveAsDraft()
+      
+      // 更新本地状态
+      that.setData({
+        submitStatus: 'draft'
+      })
+      
+      // 更新数据库中的状态
+      wx.getStorage({
+        key: 'my_data',
+        success(res) {
+          const _id = res.data._id
+          const db = wx.cloud.database()
+          db.collection('WorkhoursData').doc(_id).update({
+            data: {
+              submitStatus: 'draft',
+              lastSaveTime: new Date().toISOString()
+            },
+            success() {
+              wx.showToast({
+                title: '草稿已保存',
+                icon: 'success'
+              })
+            },
+            fail() {
+              wx.showToast({
+                title: '保存失败',
+                icon: 'none'
+              })
+            }
+          })
+        }
+      })
+    },
+
+    submit() {
+      const that = this
+      const submitDatabase = require('../../utils/submitDatabase')
+      
+      // 提交数据并标记为已提交状态
+      submitDatabase.default.submitAllDataFinal()
+      
+      // 更新本地状态
+      that.setData({
+        submitStatus: 'submitted'
+      })
+      
+      // 更新数据库中的状态
+      wx.getStorage({
+        key: 'my_data',
+        success(res) {
+          const _id = res.data._id
+          const db = wx.cloud.database()
+          db.collection('WorkhoursData').doc(_id).update({
+            data: {
+              submitStatus: 'submitted',
+              submitTime: new Date().toISOString()
+            },
+            success() {
+              wx.showToast({
+                title: '提交成功',
+                icon: 'success'
+              })
+            },
+            fail() {
+              wx.showToast({
+                title: '提交失败',
+                icon: 'none'
+              })
+            }
+          })
+        }
       })
     },
 
@@ -245,7 +318,8 @@ Component({
           success(res) {
             that.setData({
               modifyPermission: res.data.modifyPermission,
-              modifyPermissionOfResearch: res.data.modifyPermissionOfResearch
+              modifyPermissionOfResearch: res.data.modifyPermissionOfResearch,
+              submitStatus: res.data.submitStatus || 'draft' // 加载提交状态，默认为草稿
             })
             console.log(that.data);
           }

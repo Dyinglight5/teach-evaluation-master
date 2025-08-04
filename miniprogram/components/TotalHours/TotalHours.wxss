@@ -18,6 +18,34 @@
   border: 1px solid #eee;
   padding: 5px 10px;
   border-radius: 4px;
+  margin-left: 10px;
+  background-color: #fff;
+}
+
+/* 按钮组样式 */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 0 10px;
+}
+
+.button-group .van-button {
+  flex: 1;
+}
+
+.button-group .van-button:first-child {
+  margin-right: 10px;
+}
+
+/* 状态显示样式 */
+.status-row {
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+.picker {
   min-width: 100px;
   display: inline-flex;
   align-items: center;

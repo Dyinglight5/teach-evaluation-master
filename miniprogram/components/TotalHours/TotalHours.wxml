@@ -27,22 +27,44 @@
   <van-col span="12">已完成学时</van-col>
   <van-col span="12">{{ hours.hour }}</van-col>
 </van-row>
-<!-- 医生进行提交的按钮 -->
-<van-button wx:if="{{ status == '医生' && modifyPermission }}" bind:tap="submit" type="primary" size="large" color="#3d81c5">
-  提交
-</van-button>
-<!-- 教研部进行提交的按钮 -->
-<van-button wx:if="{{ status == '教研室' &&  modifyPermissionOfResearch }}" bind:tap="submit" type="primary" size="large" color="#3d81c5">
-  提交
-</van-button>
+<!-- 显示当前状态 -->
+<van-row wx:if="{{ submitStatus }}">
+  <van-col span="24" style="text-align: center; padding: 10px; color: {{ submitStatus == 'draft' ? '#ff6b35' : '#19be6b' }}">
+    <van-icon name="{{ submitStatus == 'draft' ? 'clock-o' : 'checked' }}" />
+    {{ submitStatus == 'draft' ? '草稿状态' : '已提交' }}
+  </van-col>
+</van-row>
+<!-- 医生的操作按钮 -->
+<view wx:if="{{ status == '医生' && modifyPermission }}" class="button-group">
+  <van-button bind:tap="save" type="default" size="large" color="#ff6b35" style="margin-right: 10px;">
+    保存草稿
+  </van-button>
+  <van-button bind:tap="submit" type="primary" size="large" color="#3d81c5" disabled="{{ submitStatus == 'submitted' }}">
+    {{ submitStatus == 'submitted' ? '已提交' : '正式提交' }}
+  </van-button>
+</view>
+<!-- 教研部的操作按钮 -->
+<view wx:if="{{ status == '教研室' && modifyPermissionOfResearch }}" class="button-group">
+  <van-button bind:tap="save" type="default" size="large" color="#ff6b35" style="margin-right: 10px;">
+    保存草稿
+  </van-button>
+  <van-button bind:tap="submit" type="primary" size="large" color="#3d81c5" disabled="{{ submitStatus == 'submitted' }}">
+    {{ submitStatus == 'submitted' ? '已提交' : '正式提交' }}
+  </van-button>
+</view>
 <!-- 校验部进行确认的按钮 -->
 <button class="confirm" wx:if="{{ status == '教研室' && modifyPermission }}" bind:tap="confirmByResearch" type="primary" size="large">
   确认已提交（医生）
 </button>
-<!-- 教学部进行提交的按钮 -->
-<van-button wx:if="{{ status == '教育教学部' }}" bind:tap="submit" type="primary" size="large" color="#3d81c5">
-  提交
-</van-button>
+<!-- 教学部的操作按钮 -->
+<view wx:if="{{ status == '教育教学部' }}" class="button-group">
+  <van-button bind:tap="save" type="default" size="large" color="#ff6b35" style="margin-right: 10px;">
+    保存草稿
+  </van-button>
+  <van-button bind:tap="submit" type="primary" size="large" color="#3d81c5" disabled="{{ submitStatus == 'submitted' }}">
+    {{ submitStatus == 'submitted' ? '已提交' : '正式提交' }}
+  </van-button>
+</view>
 <!-- 教学部进行确认的按钮 -->
 <button class="confirm" wx:if="{{ status == '教育教学部' && modifyPermissionOfResearch }}" bind:tap="confirmByTeaching" size="large">
   确认已提交（教研室）
