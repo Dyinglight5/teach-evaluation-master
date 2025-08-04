@@ -1,16 +1,51 @@
-<!--pages/home/addStudent/addStudent.wxml-->
+<!-- pages/home/addStudent/addStudent.wxml -->
 <van-cell-group>
-  <!--输入学生姓名-->
-  <van-field value="{{ studentName }}" placeholder="请输入学生姓名" border="{{ false }}" bind:change="onChangeStudentName" />
-  <!--请输入学生学号-->
-  <van-field value="{{ studentNumber }}" placeholder="请输入学生学号" border="{{ false }}" bind:change="onChangeStudentNumber" />
+  <!-- 输入学生姓名 -->
+  <van-field value="{{ name }}" placeholder="请输入学生姓名" border="{{ false }}" bind:change="onChangeStudentName" />
+  <!-- 请输入学生学号 -->
+  <van-field value="{{ id }}" placeholder="请输入学生学号" border="{{ false }}" bind:change="onChangeStudentNumber" />
+  <!-- 查询学生信息按钮 -->
+  <van-cell-group>
+    <van-cell>
+      <view class="query-buttons">
+        <van-button size="small" type="info" bind:tap="queryStudentInfo" icon="search">
+          查询学生信息
+        </van-button>
+        <van-button size="small" type="warning" bind:tap="checkDuplicateStudent" icon="warning-o">
+          检查重复录入
+        </van-button>
+      </view>
+    </van-cell>
+  </van-cell-group>
+  <!-- 学生信息显示区域 -->
+  <van-cell wx:if="{{ studentInfo }}" title="学生信息">
+    <view class="student-info success-text">
+      <view class="info-item">姓名：{{ studentInfo.name || '未找到' }}</view>
+      <view class="info-item">学号：{{ studentInfo.id || '未找到' }}</view>
+      <view class="info-item" wx:if="{{ studentInfo.beginDate }}">
+        实习开始：{{ studentInfo.beginDate }}
+      </view>
+      <view class="info-item" wx:if="{{ studentInfo.endDate }}">
+        实习结束：{{ studentInfo.endDate }}
+      </view>
+    </view>
+  </van-cell>
+  <!-- 重复录入检查结果 -->
+  <van-cell wx:if="{{ duplicateCheckResult }}" title="重复检查结果">
+    <view class="student-info {{ duplicateCheckResult.isDuplicate ? 'warning-text' : 'success-text' }}">
+      <view class="info-item">
+        {{ duplicateCheckResult.isDuplicate ? '⚠️ 该学生已存在' : '✅ 学生不存在，可以添加' }}
+      </view>
+      <view class="info-item" wx:if="{{ duplicateCheckResult.isDuplicate && duplicateCheckResult.existingRecord }}">
+        已有记录：{{ duplicateCheckResult.existingRecord.name }} ({{ duplicateCheckResult.existingRecord.id }})
+      </view>
+    </view>
+  </van-cell>
   <!-- 选择学生实习的时间 -->
   <van-cell title="选择开始日期" value="{{ beginDate }}" bind:click="onDisplayBeginDate" />
-
   <van-cell title="选择结束日期" value="{{ endDate }}" bind:click="onDisplayEndDate" />
-
   <van-popup position="bottom" show="{{ showBeginDate }}" bind:close="onCloseBeginDate">
-    <van-datetime-picker confirm-button-text="" cancel-button-text=""  type="year-month" value="{{ beginTime }}" min-date="{{ minTime }}" bind:input="onInputBeginDate" />
+    <van-datetime-picker confirm-button-text="" cancel-button-text="" type="year-month" value="{{ beginTime }}" min-date="{{ minTime }}" bind:input="onInputBeginDate" />
   </van-popup>
   <van-popup position="bottom" show="{{ showEndDate }}" bind:close="onCloseEndDate">
     <van-datetime-picker confirm-button-text="" cancel-button-text="" type="year-month" value="{{ endTime }}" min-date="{{ minTime }}" bind:input="onInputEndDate" />

@@ -13,7 +13,11 @@ Page({
     endDate: '',
     minTime: new Date(2023, 0).getTime(),
     showBeginDate: false,
-    showEndDate: false
+    showEndDate: false,
+    // 新增：学生信息查询结果
+    studentInfo: null as any,
+    // 新增：重复录入检查结果
+    duplicateCheckResult: null as any
   },
 
   onDisplayBeginDate() {
@@ -65,8 +69,176 @@ Page({
     })
   },
 
+  // 查询学生信息
+  queryStudentInfo() {
+    const studentId = this.data.id;
+    if (!studentId) {
+      wx.showToast({
+        title: '请输入学生学号',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
+
+    const db = wx.cloud.database();
+    const studentsCollection = db.collection('students');
+    
+    studentsCollection.where({
+      id: studentId
+    }).get({
+      success: (result: any) => {
+        if (result.data.length > 0) {
+          const studentInfo = result.data[0];
+          this.setData({
+            studentInfo: studentInfo
+          });
+          wx.showToast({
+            title: '查询成功',
+            icon: 'success',
+            duration: 2000
+          });
+        } else {
+          this.setData({
+            studentInfo: null
+          });
+          wx.showToast({
+            title: '未找到该学生',
+            icon: 'none',
+            duration: 2000
+          });
+        }
+      },
+      fail: (error: any) => {
+        console.error('查询学生信息失败:', error);
+        wx.showToast({
+          title: '查询失败',
+          icon: 'none',
+          duration: 2000
+        });
+      }
+    });
+  },
+
+  // 检查重复录入
+  checkDuplicateStudent() {
+    const studentId = this.data.id;
+    if (!studentId) {
+      wx.showToast({
+        title: '请输入学生学号',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
+
+    const db = wx.cloud.database();
+    const studentsCollection = db.collection('students');
+    
+    // 查询是否已存在该学生
+    studentsCollection.where({
+      id: studentId
+    }).get({
+      success: (result: any) => {
+        if (result.data.length > 0) {
+          const existingStudent = result.data[0];
+          this.setData({
+            duplicateCheckResult: {
+              isDuplicate: true,
+              existingRecord: existingStudent
+            }
+          });
+          wx.showToast({
+            title: '该学生已存在',
+            icon: 'none',
+            duration: 2000
+          });
+        } else {
+          this.setData({
+            duplicateCheckResult: {
+              isDuplicate: false,
+              existingRecord: null
+            }
+          });
+          wx.showToast({
+            title: '学生不存在，可以添加',
+            icon: 'success',
+            duration: 2000
+          });
+        }
+      },
+      fail: (error: any) => {
+        console.error('检查重复录入失败:', error);
+        wx.showToast({
+          title: '检查失败',
+          icon: 'none',
+          duration: 2000
+        });
+      }
+    });
+  },
+
   addStudent() {
-    //unavailableDate
+    // 检查输入是否为空
+    if (!this.data.name || !this.data.id) {
+      wx.showToast({
+        title: '请填写完整信息',
+        icon: 'none',
+        duration: 2000
+      });
+      return;
+    }
+
+    // 如果已经检查过重复且发现重复，需要用户确认
+    if (this.data.duplicateCheckResult && this.data.duplicateCheckResult.isDuplicate) {
+      wx.showModal({
+        title: '重复提醒',
+        content: '该学生已存在，是否确认添加？',
+        success: (res) => {
+          if (res.confirm) {
+            this.performAddStudent();
+          }
+        }
+      });
+    } else {
+      // 先检查是否重复，然后再添加
+      this.checkBeforeAdd();
+    }
+  },
+
+  // 添加前检查重复
+  checkBeforeAdd() {
+    const db = wx.cloud.database();
+    const studentsCollection = db.collection('students');
+    
+    studentsCollection.where({
+      id: this.data.id
+    }).get({
+      success: (result: any) => {
+        if (result.data.length > 0) {
+          wx.showModal({
+            title: '重复提醒',
+            content: '该学生已存在，是否确认添加？',
+            success: (res) => {
+              if (res.confirm) {
+                this.performAddStudent();
+              }
+            }
+          });
+        } else {
+          this.performAddStudent();
+        }
+      },
+      fail: (error: any) => {
+        console.error('检查重复失败:', error);
+        // 检查失败也继续添加
+        this.performAddStudent();
+      }
+    });
+  },
+
+  // 执行添加学生操作
+  performAddStudent() {
     const db = wx.cloud.database();
     const studentCollection = db.collection('students');
     

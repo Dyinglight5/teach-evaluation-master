@@ -1,2 +1,25 @@
 /* pages/home/addStudent/addStudent.wxss */
 
+.query-buttons {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+
+.student-info {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.success-text {
+  color: #19be6b;
+}
+
+.warning-text {
+  color: #ff6b35;
+}
+
+.info-item {
+  margin-bottom: 5px;
+}
+
