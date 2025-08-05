@@ -74,6 +74,83 @@ Page({
     return false
 
   },
+  //进行身份和密码的校验 - 异步版本
+  checkPasswordAsync(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const db = wx.cloud.database();
+      const collection = db.collection('WorkhoursData');
+      const researchCollection = db.collection('ResearchDepartment')
+      const teachingCollection = db.collection('TeachingDepartment')
+      //将身份分离出来
+      const statusArr = this.data.statusValue.split(' / ');
+      console.log(statusArr, this.data.password);
+      
+      if (statusArr.length == 1) {
+        if (statusArr[0] == '教育教学部') {
+          teachingCollection.get({
+            success: (res: any) => {
+              if (this.data.password == res.data[0].password){
+                this.setData({
+                  passwordCorrect: true
+                })
+                resolve()
+              } else {
+                reject(new Error('密码错误'))
+              }
+            },
+            fail: (error: any) => {
+              reject(error)
+            }
+          })
+        } else if (statusArr[0] == '医生') {
+          collection.where({
+            id: this.data.id
+          }).get({
+            success: (res: any) => {
+              if (res.data.length > 0 && this.data.password == res.data[0].password){
+                this.setData({
+                  passwordCorrect: true
+                })
+                resolve()
+              } else {
+                reject(new Error('密码错误或用户不存在'))
+              }
+            },
+            fail: (error: any) => {
+              reject(error)
+            }
+          })
+        }
+      } else if (statusArr.length == 2) {
+        //如果是教研部
+        researchCollection.where({
+          name: statusArr[1]
+        }).get({
+          success: (res: any) => {
+            console.log(res);
+            const researchData = res.data
+            let passwordFound = false
+            researchData.forEach((item: any) => {
+              if (item.password == this.data.password) {
+                passwordFound = true
+                this.setData({
+                  passwordCorrect: true
+                })
+              }
+            })
+            if (passwordFound) {
+              resolve()
+            } else {
+              reject(new Error('密码错误'))
+            }
+          },
+          fail: (error: any) => {
+            reject(error)
+          }
+        })
+      }
+    })
+  },
   //进行身份和密码的校验
   checkPassword(callback: any) {
     let that = this
@@ -141,13 +218,19 @@ Page({
       return;
     }
 
-    //进行密码校验
-    this.checkPassword(function() {
-      setTimeout(() => {
+    //进行身份和密码的校验
+    //优化：使用Promise避免固定延迟
+    this.checkPasswordAsync()
+      .then(() => {
         that.login()
-      }, 1000)
-    })
-
+      })
+      .catch((error: any) => {
+        console.error('登录验证失败:', error)
+        wx.showToast({
+          title: '登录失败，请重试',
+          icon: 'none'
+        })
+      })
   },
 
   login() {
@@ -185,21 +268,12 @@ Page({
       icon: 'success'
     })
     
-    // 延迟跳转，确保数据保存完成
+    // 优化：直接跳转，不再强制调用onLoad方法
     setTimeout(() => {
       wx.switchTab({
-        url: '../index/index',
-        success: () => {
-          // 跳转成功后，通过事件或者重新加载来刷新首页数据
-          const pages = getCurrentPages();
-          const indexPage = pages.find(page => page.route === 'pages/index/index');
-          if (indexPage) {
-            // 如果首页已经存在，直接调用onLoad方法刷新数据
-            indexPage.onLoad();
-          }
-        }
+        url: '../index/index?fromLogin=1'
       })
-    }, 1000)
+    }, 500) // 延迟500毫秒跳转
   },
 
   //号码记录

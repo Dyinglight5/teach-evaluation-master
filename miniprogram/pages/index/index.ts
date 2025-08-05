@@ -1,5 +1,7 @@
 // index.ts
 // 获取应用实例
+import DBOptimizer from '../../utils/dbOptimizer'
+
 const app = getApp<IAppOption>()
 
 Page({
@@ -21,7 +23,9 @@ Page({
     id: '',
     showingComponentNumber: 1,
     status: '',
-    name: ''
+    name: '',
+    isDataLoaded: false, // 数据加载状态标识
+    isFromLogin: false   // 是否来自登录页面
   },
 
   onChangename(e: any) {
@@ -127,13 +131,21 @@ Page({
     }
 
   },
-  onLoad() {
+  onLoad(options: any = {}) {
     // @ts-ignore
     if (wx.getUserProfile) {
       this.setData({
         canIUseGetUserProfile: true
       })
     }
+    
+    // 标记是否来自登录页面
+    if (options.fromLogin) {
+      this.setData({
+        isFromLogin: true
+      })
+    }
+    
     this.updatePage()
     this.loadUserData()
   },
@@ -142,65 +154,80 @@ Page({
    * 页面显示时的回调函数
    */
   onShow() {
-    // 页面显示时重新加载数据，确保登录后数据能及时更新
-    this.loadUserData()
+    // 只有在数据未加载或者不是来自登录时才重新加载
+    if (!this.data.isDataLoaded && !this.data.isFromLogin) {
+      this.loadUserData()
+    }
+    // 重置登录标识
+    if (this.data.isFromLogin) {
+      this.setData({
+        isFromLogin: false
+      })
+    }
   },
 
   /**
-   * 加载用户数据的通用方法
+   * 加载用户数据的通用方法 - 优化版本
    */
-  loadUserData() {
-    let that = this
-    wx.getStorage({
-      key: 'status',
-      success(res) {
-        that.setData({
-          status: res.data
-        })
-        
-        // 根据不同身份获取不同的用户名
-        if (res.data === '医生') {
-          wx.getStorage({
-            key: 'my_data',
-            success(res) {
-              that.setData({
-                name: res.data.name
-              })
-            },
-            fail() {
-              that.setData({
-                name: '未登录'
-              })
-            }
-          })
-        } else if (res.data === '教研室') {
-          wx.getStorage({
-            key: 'researchName',
-            success(res) {
-              that.setData({
-                name: res.data
-              })
-            },
-            fail() {
-              that.setData({
-                name: '教研室'
-              })
-            }
-          })
-        } else if (res.data === '教育教学部') {
-          that.setData({
-            name: '教育教学部'
-          })
-        }
+  async loadUserData() {
+    // 如果数据已加载且不需要强制刷新，直接返回
+    if (this.data.isDataLoaded && this.data.status && this.data.name) {
+      return
+    }
+
+    try {
+      // 使用优化的批量获取方法
+      const storageData = await DBOptimizer.batchGetStorage(['status', 'my_data', 'researchName'])
+      
+      if (!storageData.status) {
+        return
       }
+
+      this.setData({
+        status: storageData.status
+      })
+      
+      // 根据不同身份获取不同的用户名
+      let name = ''
+      if (storageData.status === '医生') {
+        name = storageData.my_data?.name || '未登录'
+      } else if (storageData.status === '教研室') {
+        name = storageData.researchName || '教研室'
+      } else if (storageData.status === '教育教学部') {
+        name = '教育教学部'
+      }
+
+      this.setData({
+        name: name,
+        isDataLoaded: true
+      })
+    } catch (error) {
+      console.error('加载用户数据失败:', error)
+    }
+  },
+
+  /**
+   * Promise化的getStorage方法
+   */
+  getStorageAsync(key: string): Promise<any> {
+    return DBOptimizer.getStorageAsync(key)
+  },
+
+  /**
+   * 强制刷新用户数据
+   */
+  refreshUserData() {
+    this.setData({
+      isDataLoaded: false
     })
+    this.loadUserData()
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-    this.loadUserData()
+    this.refreshUserData()
     wx.stopPullDownRefresh()
   }
 })
